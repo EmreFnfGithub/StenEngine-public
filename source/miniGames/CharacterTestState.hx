@@ -178,7 +178,7 @@ class CharacterTestState extends MusicBeatState
 		    front.updateHitbox();
 	        front.antialiasing = FlxG.save.data.antialiasing;
 		    front.scrollFactor.set(0.9, 0.9);
-            add(front);
+            add(front); 
 
 		char1 = new Character(500, 300, charnamee, true);
 		char1.setGraphicSize(Std.int(char1.width * 0.8));
