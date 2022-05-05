@@ -50,7 +50,7 @@ class MiniGamesState extends MusicBeatState
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFF353535;
-		add(bg);
+		add(bg); 
 
 		grpOptionShit = new FlxTypedGroup<Alphabet>();
 		add(grpOptionShit);

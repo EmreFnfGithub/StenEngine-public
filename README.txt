@@ -31,7 +31,7 @@ THANKS FOR DOWNLOADIN.
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
 
 Little info, you have FULL PERMISSION to stream, letsplay, meme, shitpost, do WHATEVER you want with the game.
-Use the music in videos you do, use art, ANYTHING. GO CRAZY BRO.
+Use the music in videos you do, use art, ANYTHING. GO CRAZY BRO. 
 
 If you do make any sort of video, it would be a bro move if you linked the game and spread the word
 
