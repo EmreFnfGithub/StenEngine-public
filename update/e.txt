@@ -1,1 +1,1 @@
-https://github.com/EmreFnfGithub/versiongith/blob/main/version.txt
+https://github.com/EmreFnfGithub/StenEngine-public/releases/download/StenEngine/sten_engine_release_64x.rar
