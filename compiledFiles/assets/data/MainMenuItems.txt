@@ -1,6 +1,0 @@
-story_mode
-freeplay 
-credits 
-minigames 
-options 
-mods
