@@ -26,6 +26,7 @@ class CreditsState extends MusicBeatState
 {
 	var credits:Array<CreditsMetadata> = [];
 	var iconArray:Array<AttachedSprite> = [];
+	var descBox:AttachedSprite;
 
 	static var curSelected:Int = 0;
 
@@ -64,8 +65,17 @@ class CreditsState extends MusicBeatState
 		bg.color = FlxColor.PINK;
 		add(bg);
 
+		descBox = new AttachedSprite();
+		descBox.makeGraphic(1, 1, FlxColor.BLACK);
+		descBox.xAdd = -10;
+		descBox.yAdd = -10;
+		descBox.alphaMult = 0.6;
+		descBox.alpha = 0.6;
+		add(descBox);
+
 		descText = new FlxText(50, 600, 1180, "", 32);
 		descText.setFormat(Paths.font("muff.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descBox.sprTracker = descText;
 		descText.scrollFactor.set();
 		descText.text = 'what';
 		descText.borderSize = 2.4;
@@ -73,6 +83,52 @@ class CreditsState extends MusicBeatState
 
 		grpCredits = new FlxTypedGroup<Alphabet>();
 		add(grpCredits);
+
+		var contentt1:String = sys.io.File.getContent('assets/data/creditsColors/' + curSelected + '.txt');
+			if(contentt1 == "RED")
+			{
+				bg.color = FlxColor.RED;
+			}
+			if(contentt1 == "BROWN")
+			{
+				bg.color = FlxColor.BROWN;
+			}
+			if(contentt1 == "WHITE")
+			{
+				bg.color = FlxColor.WHITE;
+			}
+			if(contentt1 == "YELLOW")
+			{
+				bg.color = FlxColor.YELLOW;
+			}
+			if(contentt1 == "GREEN")
+			{
+				bg.color = FlxColor.GREEN;
+			}
+			if(contentt1 == "BLACK")
+			{
+				bg.color = FlxColor.BLACK;
+			}
+			if(contentt1 == "CYAN")
+			{
+				bg.color = FlxColor.CYAN;
+			}
+			if(contentt1 == "BLUE")
+			{
+				bg.color = FlxColor.BLUE;
+			}
+			if(contentt1 == "PINK")
+			{
+				bg.color = FlxColor.PINK;
+			}
+			if(contentt1 == "PURPLE")
+			{
+				bg.color = FlxColor.PURPLE;
+			}
+			if(contentt1 == "KAWAISPRITECOLOR")
+			{
+				bg.color = 0xFF757EFF;
+			}
 
 		for (i in 0...credits.length)
 		{
@@ -101,24 +157,8 @@ class CreditsState extends MusicBeatState
 		descText.setFormat(Paths.font("muff.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
+		descBox.sprTracker = descText;
 		add(descText);
-
-		// JUST DOIN THIS SHIT FOR TESTING!!!
-		/* 
-			var md:String = Markdown.markdownToHtml(Assets.getText('CHANGELOG.md'));
-
-			var texFel:TextField = new TextField();
-			texFel.width = FlxG.width;
-			texFel.height = FlxG.height;
-			// texFel.
-			texFel.htmlText = md;
-
-			FlxG.stage.addChild(texFel);
-
-			// scoreText.textField.htmlText = md;
-
-			trace(md);
-		 */
 
 		super.create();
 	}
@@ -133,6 +173,11 @@ class CreditsState extends MusicBeatState
 		var space = FlxG.keys.justPressed.SPACE;
 
 		var shiftMult:Int = 1;
+
+		if (FlxG.keys.justPressed.E)
+			{
+				FlxG.switchState(new CreditsEditorState());
+			}
 		if (FlxG.keys.pressed.SHIFT)
 			shiftMult = 3;
 
@@ -140,11 +185,101 @@ class CreditsState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(-shiftMult);
+			var contentt1:String = sys.io.File.getContent('assets/data/creditsColors/' + curSelected + '.txt');
+			if(contentt1 == "RED")
+			{
+				bg.color = FlxColor.RED;
+			}
+			if(contentt1 == "BROWN")
+			{
+				bg.color = FlxColor.BROWN;
+			}
+			if(contentt1 == "WHITE")
+			{
+				bg.color = FlxColor.WHITE;
+			}
+			if(contentt1 == "YELLOW")
+			{
+				bg.color = FlxColor.YELLOW;
+			}
+			if(contentt1 == "GREEN")
+			{
+				bg.color = FlxColor.GREEN;
+			}
+			if(contentt1 == "BLACK")
+			{
+				bg.color = FlxColor.BLACK;
+			}
+			if(contentt1 == "CYAN")
+			{
+				bg.color = FlxColor.CYAN;
+			}
+			if(contentt1 == "BLUE")
+			{
+				bg.color = FlxColor.BLUE;
+			}
+			if(contentt1 == "PINK")
+			{
+				bg.color = FlxColor.PINK;
+			}
+			if(contentt1 == "PURPLE")
+			{
+				bg.color = FlxColor.PURPLE;
+			}
+			if(contentt1 == "KAWAISPRITECOLOR")
+			{
+				bg.color = 0xFF757EFF;
+			}
 		}
 		if (downP)
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(shiftMult);
+			var contentt1:String = sys.io.File.getContent('assets/data/creditsColors/' + curSelected + '.txt');
+			if(contentt1 == "RED")
+			{
+				bg.color = FlxColor.RED;
+			}
+			if(contentt1 == "BROWN")
+			{
+				bg.color = FlxColor.BROWN;
+			}
+			if(contentt1 == "WHITE")
+			{
+				bg.color = FlxColor.WHITE;
+			}
+			if(contentt1 == "YELLOW")
+			{
+				bg.color = FlxColor.YELLOW;
+			}
+			if(contentt1 == "GREEN")
+			{
+				bg.color = FlxColor.GREEN;
+			}
+			if(contentt1 == "BLACK")
+			{
+				bg.color = FlxColor.BLACK;
+			}
+			if(contentt1 == "CYAN")
+			{
+				bg.color = FlxColor.CYAN;
+			}
+			if(contentt1 == "BLUE")
+			{
+				bg.color = FlxColor.BLUE;
+			}
+			if(contentt1 == "PINK")
+			{
+				bg.color = FlxColor.PINK;
+			}
+			if(contentt1 == "PURPLE")
+			{
+				bg.color = FlxColor.PURPLE;
+			}
+			if(contentt1 == "KAWAISPRITECOLOR")
+			{
+				bg.color = 0xFF757EFF;
+			}
 		}
 
 		if(controls.ACCEPT)

@@ -18,6 +18,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import miniGames.MiniGamesState;
+import funkinMedia.FunkinMedia;
 #if FEATURE_DISCORD
 import Discord.DiscordClient;
 #end
@@ -28,9 +29,19 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
+	public static var donateLink:String = sys.io.File.getContent('assets/custom/custom_game/donateLink.txt');
 	public static var language:String = hmmmmmmmmmmmmmmmm;
 
 	var curSelected:Int = 0;
+	var updateAvailable:Bool = false;
+	var bg2:FlxSprite;
+	var its:Bool = true;
+
+	var textt:FlxText;
+	var textt2:FlxText;
+	var textt3:FlxText;
+	var textt4:FlxText;
+	var button:FlxButton;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
@@ -53,7 +64,7 @@ class MainMenuState extends MusicBeatState
 
 	public static var nightly:String = "";
 
-	public static var StenEngineVer:String = "0.1 Demo" + nightly;
+	public static var StenEngineVer:String = "0.4 Demo" + nightly;
 	public static var gameVer:String = "0.2.7.1";
 
 	var magenta:FlxSprite;
@@ -82,14 +93,18 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
+		
+
+		
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('menuDesat'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.10;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = FlxG.save.data.antialiasing;
+		bg.color = FlxG.random.color();
 		add(bg);
 
 		camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -116,8 +131,36 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var button:FlxButton = new FlxButton(50, 50, "Add", OnClickButton);
-        
+		bg2 = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg2.alpha = 0.6;
+		bg2.scrollFactor.set();
+		add(bg2);
+
+		textt = new FlxText(437, FlxG.height - 580, 0,  " !! README !!", -180);
+		textt.scrollFactor.set();
+		textt.setFormat("VCR OSD Mono", 36, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(textt);
+		
+
+		textt2 = new FlxText(210, FlxG.height - 525, 0,  "This engine was made for modding the FNF.", -180);
+		textt2.scrollFactor.set();
+		textt2.setFormat("VCR OSD Mono", 36, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(textt2);
+
+		textt3 = new FlxText(210, FlxG.height - 470, 0,  "Sten Engine GameBanana Link :", -180);
+		textt3.scrollFactor.set();
+		textt3.setFormat("VCR OSD Mono", 36, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(textt3);
+
+		textt4 = new FlxText(210, FlxG.height - 415, 0,  "https://gamebanana.com/mods/375364", -180);
+		textt4.scrollFactor.set();
+		textt4.setFormat("VCR OSD Mono", 36, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(textt4);
+
+		button = new FlxButton(560, 360, "Okey", OnClickButton);
+        add(button);
+
+		FlxG.mouse.visible = true;
 
 		var scale:Float = 1;
 		/*if(optionShit.length > 6) {
@@ -143,15 +186,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.antialiasing = true;
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
-				if (firstStart)
-				FlxTween.tween(menuItem, {y: 60 + (i * 160)}, 1 + (i * 0.25), {
-					ease: FlxEase.expoInOut,
-					onComplete: function(flxTween:FlxTween)
-					{
-						finishedFunnyMove = true;
-						changeItem();
-					}
-				});
+				
 			}
 			FlxG.camera.follow(camFollowPos, null, 1);
 
@@ -159,30 +194,59 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 0.60 * (60 / FlxG.save.data.fpsCap));
 		
+		var hmain:Int = 0;
+		var h11 = sys.io.File.getContent("assets/custom/custom_game/mainMenuFont.txt");
+		var h10 = sys.io.File.getContent("assets/custom/custom_game/modversionandtext.txt");
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 49, 0, h10, 12);
+        versionShit.scrollFactor.set();
+        versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        add(versionShit);
+
+		
         if(language == "en")
 			{
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF Version : " + gameVer, 12);
+				
+				
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 33, 0, "Sten Engine Version : " + StenEngineVer, 12);
+                versionShit.scrollFactor.set();
+                versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                add(versionShit);
+
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF Version : " + gameVer + " Press F to Funkin Media", 12);
 				versionShit.scrollFactor.set();
-				versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				add(versionShit);
 			}
 	
 		if(language == "tr")
-			{	var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "E ye basarak editorlere ve ya modlara gir - FNF Surumu : " + gameVer, 12);
+			{
+				var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Sten Engine Surumu" + StenEngineVer, 12);
+                versionShit.scrollFactor.set();
+                versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                add(versionShit);
+
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "E ye basarak editorlere ve ya modlara gir - FNF Surumu : " + gameVer + " F e basarak Funkin Mediaya gir", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);}
 
 		if(language == "ru")
-			{	var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Введите редакторы и режимы, нажав Е - Рой ФНФ :" + gameVer, 12);
+			{	
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Sten Engine Version : " + StenEngineVer, 12);
+                versionShit.scrollFactor.set();
+                versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                add(versionShit);
+
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF Version : " + gameVer + " Press F to Funkin Media", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);}
 		
 
 		
+
 		selec.scrollFactor.set();
-		selec.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		selec.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(selec);
 
 		selec.text = optionShit[curSelected] + "";
@@ -203,7 +267,13 @@ class MainMenuState extends MusicBeatState
 
 	function OnClickButton():Void
 	{
-           
+		textt.visible = false;
+		textt2.visible = false;
+		textt3.visible = false;
+		textt4.visible = false;
+		bg2.visible = false;
+		button.visible = false;
+		FlxG.mouse.visible = false;
 	}
 
 	var selectedSomethin:Bool = false;
@@ -258,6 +328,11 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new EngineEditorsState());
 			}
 
+                                    if (FlxG.keys.justPressed.F)
+			{
+				FlxG.switchState(new funkinMedia.FunkinMedia());
+			}
+
 			if (FlxG.keys.justPressed.DOWN)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -274,7 +349,7 @@ class MainMenuState extends MusicBeatState
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
-					FlxG.switchState(new DonateState());
+					CoolUtil.browserLoad(donateLink);
 				}
 				else
 				{
@@ -284,8 +359,12 @@ class MainMenuState extends MusicBeatState
 					if (FlxG.save.data.flashing)
 						FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
+					
+						
 					menuItems.forEach(function(spr:FlxSprite)
 					{
+						
+
 						if (curSelected != spr.ID)
 						{
 							FlxTween.tween(spr, {alpha: 0}, 1.3, {
@@ -315,6 +394,7 @@ class MainMenuState extends MusicBeatState
 						}
 					});
 				}
+
 			}
 		}
 
@@ -375,7 +455,6 @@ class MainMenuState extends MusicBeatState
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
-
              
 
 				

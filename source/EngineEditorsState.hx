@@ -12,6 +12,7 @@ import flixel.math.FlxMath;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.addons.text.FlxTypeText;
 import flixel.text.FlxText;
+import flixel.util.FlxTimer;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.effects.FlxFlicker;
@@ -26,7 +27,13 @@ using StringTools;
 
 class EngineEditorsState extends MusicBeatState
 {
-	var optionShit:Array<String> = ['Character Editor', 'Week Editor', 'Chart Editor', 'Mods', 'Minigames'];
+	var optionShit:Array<String> = 
+	[/*'Custom State Editor',*/
+	'Character Editor',
+	'Week Editor',
+	'Chart Editor',
+	'Mods',
+	'Minigames'];
 
 	var confirming:Bool = false;
 
@@ -36,7 +43,12 @@ class EngineEditorsState extends MusicBeatState
 	private var char1:Character = null;
 	private var char2:Character = null;
 
+	var bgColors:Array<String> = ['#314d7f', '#4e7093', '#70526e', '#594465'];
+	var colorRotation:Int = 1;
+
 	var bg:FlxSprite;
+	var bg2:FlxSprite;
+	var creditText:Alphabet;
 
 	override function create()
 	{
@@ -45,9 +57,12 @@ class EngineEditorsState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('editorsbg'));
 		bg.color = 0xFF353535;
 		add(bg);
+
+		bg2 = new FlxSprite().loadGraphic(Paths.image('editors1'));
+		add(bg2);
 
 		grpOptionShit = new FlxTypedGroup<Alphabet>();
 		add(grpOptionShit);
@@ -64,13 +79,13 @@ class EngineEditorsState extends MusicBeatState
 
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Coming Soon", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("PhantomMuff 1.5", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 
 		for (i in 0...optionShit.length)
 		{
-			var creditText:Alphabet = new Alphabet(0, (70 * i) + 30, optionShit[i], true, false);
+			creditText = new Alphabet(0, (70 * i) + 30, optionShit[i], true, false);
 			creditText.isMenuItem = true;
 			creditText.targetY = i;
 			grpOptionShit.add(creditText);
@@ -147,6 +162,10 @@ class EngineEditorsState extends MusicBeatState
 			{
 				switch (optionShit[curSelected])
 				{
+					/*case 'Custom State Editor':
+						LoadingState.loadAndSwitchState(new CustomStateEditor());
+						*/
+
 					case 'Character Editor':
 						LoadingState.loadAndSwitchState(new MainMenuState());
 

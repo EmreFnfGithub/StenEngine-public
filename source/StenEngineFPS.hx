@@ -113,7 +113,7 @@ class StenEngineFPS extends TextField
 		{
 			text = (FlxG.save.data.fps ? "FPS: "
 				+ currentFPS
-				+ (Main.watermarks ? "\nSten Engine Pre-Release " : "") : (Main.watermarks ? "Sten Engine Pre-Release " : ""));
+				+ (Main.watermarks ? "\nSten Engine Release " : "") : (Main.watermarks ? "Sten Engine Release " : ""));
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();

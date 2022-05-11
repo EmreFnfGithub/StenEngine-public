@@ -252,6 +252,16 @@ class Paths
 		return FlxAtlasFrames.fromSparrow(loadImage(key, library), file('images/$key.xml', library));
 	}
 
+	static public function getSkinSparrowAtlas(key:String, ?library:String, ?isCharacter:Bool = false)
+		{
+			library = "skins";
+			if (isCharacter)
+			{
+				return FlxAtlasFrames.fromSparrow(loadImage('characters/$key', library), file('images/characters/$key.xml', library));
+			}
+			return FlxAtlasFrames.fromSparrow(loadImage(key, library), file('images/$key.xml', library));
+		}
+
 	/**
 	 * Senpai in Thorns uses this instead of Sparrow and IDK why.
 	 */

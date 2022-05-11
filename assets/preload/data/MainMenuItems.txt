@@ -2,5 +2,6 @@ story_mode
 freeplay 
 credits 
 minigames 
+donate 
 options 
 mods

@@ -97,6 +97,7 @@
 	<assets path="assets/sm"    library="sm"    exclude="*.mp3" unless="web"/>
 
 	<assets path='example_mods' rename='mods' embed='false'/>
+            <assets path='Updater.exe' rename='Updater.exe' embed='false'/>
       <assets path='StenEngineWeb.url' rename='Engine Web URL.url' embed='false'/>
       <assets path='README.txt' rename='README.txt' embed='false'/>
 	<!-- <template path='mods' /> -->

@@ -41,6 +41,7 @@ class TitleState extends MusicBeatState
 	static var initialized:Bool = false;
     
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
+	public static var thestenenginetitle:String = sys.io.File.getContent('assets/custom/custom_game/title.txt');
 	public static var language:String = hmmmmmmmmmmmmmmmm;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -51,10 +52,16 @@ class TitleState extends MusicBeatState
 
 	var curWacky:Array<String> = [];
 
+	var updateAvailable:Bool = false;
 	var wackyImage:FlxSprite;
 
 	override public function create():Void
 	{
+		if(sys.FileSystem.exists("assets/custom/custom_game/title.txt"))
+			{
+				Application.current.window.title = thestenenginetitle;
+			}
+		
 		
 		trace("Sten Engine Started! Welcome");
 
@@ -69,6 +76,21 @@ class TitleState extends MusicBeatState
 		{
 			Debug.logTrace("We loaded " + openfl.Assets.getLibrary("default").assetsLoaded + " assets into the default library");
 		}
+		var http = new haxe.Http("https://raw.githubusercontent.com/EmreFnfGithub/StenEngine-public/main/gameVer.txt");
+
+		http.onData = function(data:String)
+		{
+			var updateVersion = data.split('\n')[0].trim();
+			var curVersion:String = MainMenuState.StenEngineVer;
+			if (updateVersion != curVersion)
+			{
+				updateAvailable = true;
+			}
+		}
+
+		http.request();
+
+		
 
 		FlxG.autoPause = false;
 
@@ -175,15 +197,14 @@ class TitleState extends MusicBeatState
 		gfDance.antialiasing = FlxG.save.data.antialiasing;
 		add(gfDance);
 
-		titleText = new FlxSprite(100, FlxG.height * 0.8);
+		titleText = new FlxSprite(50, FlxG.height * 0.8);
+		titleText.x = 40;
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
-		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
 		titleText.antialiasing = FlxG.save.data.antialiasing;
-		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		// titleText.screenCenter(X);
-		add(titleText);
+		
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.loadImage('logo'));
 		logo.screenCenter();
@@ -289,6 +310,7 @@ class TitleState extends MusicBeatState
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
 
+		//EASTER EGG
 		if(FlxG.keys.justPressed.S)
 			{
 				gfDance.frames = Paths.getSparrowAtlas('xman');
@@ -296,6 +318,14 @@ class TitleState extends MusicBeatState
 				gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 				gfDance.antialiasing = FlxG.save.data.antialiasing;
 				add(gfDance);
+			}
+
+		//EASTER EGG
+		if(FlxG.keys.justPressed.R)
+			{
+					gfDance.color = FlxG.random.color();
+					backgroundTitle.color = FlxG.random.color();
+					add(gfDance);
 			}
 		var pressedEnter:Bool = controls.ACCEPT;
 		var hmmtheback:Bool = controls.BACK;
@@ -314,6 +344,7 @@ class TitleState extends MusicBeatState
 		{
 			if (FlxG.save.data.flashing)
 				titleText.animation.play('press');
+			add(titleText);
 
 			FlxG.camera.flash(FlxColor.WHITE, 1);
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
@@ -328,6 +359,19 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !skippedIntro && initialized)
 		{
+			new FlxTimer().start(0.1, function(tmr:FlxTimer)
+				{
+					if (updateAvailable)
+					{
+						FlxG.switchState(new OutdatedSubState());
+					}
+					else
+					{
+						FlxG.switchState(new MainMenuState());
+					}
+				});
+		
+				
 			skipIntro();
 		}
 

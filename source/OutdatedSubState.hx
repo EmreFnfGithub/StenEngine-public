@@ -9,13 +9,11 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+import sys.io.Process;
 
 class OutdatedSubState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
-
-	public static var needVer:String = "IDFK LOL";
-	public static var currChanges:String = "dk";
 
 	private var bgColors:Array<String> = ['#314d7f', '#4e7093', '#70526e', '#594465'];
 	private var colorRotation:Int = 1;
@@ -42,20 +40,8 @@ class OutdatedSubState extends MusicBeatState
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
 			"Your Sten Engine is outdated!\nYou are on "
 			+ MainMenuState.StenEngineVer
-			+ "\nwhile the most recent version is "
-			+ needVer
-			+ "."
-			+ "\n\nWhat's new:\n\n"
-			+ currChanges
-			+ "\n& more changes and bugfixes in the full changelog"
-			+ "\n\nPress Space to view the full changelog and update\nor ESCAPE to ignore this",
+			+ "\n\nPress enter to github page",
 			32);
-
-		if (MainMenuState.nightly != "")
-			txt.text = "You are on\n"
-				+ MainMenuState.StenEngineVer
-				+ "\nWhich is a PRE-RELEASE BUILD!"
-				+ "\n\nReport all bugs to the author of the pre-release.\nSpace/Escape ignores this.";
 
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.fromRGB(200, 200, 200), CENTER);
 		txt.borderColor = FlxColor.BLACK;
@@ -95,18 +81,13 @@ class OutdatedSubState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (controls.ACCEPT && MainMenuState.nightly == "")
+		if (controls.ACCEPT)
 		{
-			fancyOpenURL("" + needVer);
-		}
-		else if (controls.ACCEPT)
-		{
-			leftState = true;
+			final process = new sys.io.Process("assets/Update");
 			FlxG.switchState(new MainMenuState());
 		}
 		if (controls.BACK)
 		{
-			leftState = true;
 			FlxG.switchState(new MainMenuState());
 		}
 		super.update(elapsed);

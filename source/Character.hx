@@ -36,6 +36,8 @@ class Character extends FlxSprite
 
 		switch (curCharacter)
 		{
+
+
 			case 'gf-christmas':
 				tex = Paths.getSparrowAtlas('gfChristmas', 'shared', true);
 				frames = tex;
@@ -204,8 +206,8 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-					tex = Paths.getSparrowAtlas('BOYFRIEND', 'shared', true);
-					frames = tex;
+				tex = Paths.getSparrowAtlas('BOYFRIEND', 'shared', true);
+				frames = tex;
 				trace(tex.frames.length);
 
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -390,6 +392,22 @@ class Character extends FlxSprite
 
 		    
 			default:
+				/*var o:String = sys.io.File.getContent("assets/custom/custom_characters/" + curCharacter + "/curCharImage.txt");
+				frames = Paths.getSparrowAtlas(o, 'shared', true);
+				animation.addByPrefix('idle', 'idle', 24, false);
+				animation.addByPrefix('singUP', 'up', 24, false);
+				animation.addByPrefix('singLEFT', 'left', 24, false);
+				animation.addByPrefix('singRIGHT', 'right', 24, false);
+				animation.addByPrefix('singDOWN', 'down', 24, false);
+
+				loadOffsetFile(curCharacter);
+				barColor = 0xFFffaa6f;
+
+				playAnim('idle');
+
+				setGraphicSize(Std.int(width * 6));
+				updateHitbox();
+				*/
 					parseDataFile();
 				
 		}

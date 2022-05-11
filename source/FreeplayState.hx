@@ -201,6 +201,50 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
+		
+		if(songs[curSelected].songCharacter == "dad")
+			{
+				bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
+			}
+			
+		if(songs[curSelected].songCharacter == "gf")
+			{
+					bg.loadGraphic(Paths.loadImage('gffreeplayimage'));
+			}
+		if(songs[curSelected].songCharacter == "spooky")
+			{
+					bg.loadGraphic(Paths.loadImage('spookyfreeplayimage'));
+			}
+		if(songs[curSelected].songCharacter == "pico")
+			{
+						bg.loadGraphic(Paths.loadImage('picofreeplayimage'));
+			}	
+		if(songs[curSelected].songCharacter == "mom")
+			{
+						bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
+			}		
+		if(songs[curSelected].songCharacter == "mom-car")
+			{
+						bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
+			}	
+		if(songs[curSelected].songCharacter == "senpai")
+			{
+						bg.loadGraphic(Paths.loadImage('senpaifreeplayimage'));
+			}	
+		if(songs[curSelected].songCharacter == "monster")
+			{
+						bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
+			}		
+		if(songs[curSelected].songCharacter == "monster-christmas")
+			{
+						bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
+			}		
+		if(songs[curSelected].songCharacter == "spirit")
+				{
+							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
+				}		
+
 		changeSelection();
 		changeDiff();
 
@@ -401,6 +445,10 @@ class FreeplayState extends MusicBeatState
 				{
 							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
 				}		
+			if(songs[curSelected].songCharacter == "spirit")
+					{
+								bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
+					}		
 		}
 		if (downP)
 		{

@@ -413,33 +413,45 @@ class Stage extends MusicBeatState
 				}
 			default:
 				{
-					camZoom = 0.9;
-					curStage = 'stage';
-					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.loadImage('stageback', 'shared'));
-					bg.antialiasing = FlxG.save.data.antialiasing;
-					bg.scrollFactor.set(0.9, 0.9);
-					bg.active = false;
-					swagBacks['bg'] = bg;
-					toAdd.push(bg);
+					var deeefaultt = sys.io.File.getContent("assets/custom/custom_stages/" + PlayState.SONG.songName + ".txt");
+					curStage = deeefaultt;
+					if(sys.FileSystem.exists("assets/custom/custom_stages/" + curStage + "/back.txt"))
+						{
+							var stagecustomb = sys.io.File.getContent("assets/custom/custom_stages/" + curStage + "/back.txt");
+							var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.loadImage(stagecustomb, 'shared'));
+							bg.antialiasing = FlxG.save.data.antialiasing;
+							bg.scrollFactor.set(0.9, 0.9);
+							bg.active = false;
+							swagBacks['bg'] = bg;
+							toAdd.push(bg);
+						}
+					if(sys.FileSystem.exists("assets/custom/custom_stages/" + curStage + "/front.txt"))
+						{
+							var stagecustomf = sys.io.File.getContent("assets/custom/custom_stages/" + curStage + "/front.txt");
+							var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.loadImage(stagecustomf, 'shared'));
+					        stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+					        stageFront.updateHitbox();
+					        stageFront.antialiasing = FlxG.save.data.antialiasing;
+					        stageFront.scrollFactor.set(0.9, 0.9);
+					        stageFront.active = false;
+					        swagBacks['stageFront'] = stageFront;
+					        toAdd.push(stageFront);
+						}
 
-					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.loadImage('stagefront', 'shared'));
-					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-					stageFront.updateHitbox();
-					stageFront.antialiasing = FlxG.save.data.antialiasing;
-					stageFront.scrollFactor.set(0.9, 0.9);
-					stageFront.active = false;
-					swagBacks['stageFront'] = stageFront;
-					toAdd.push(stageFront);
 
-					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.loadImage('stagecurtains', 'shared'));
-					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-					stageCurtains.updateHitbox();
-					stageCurtains.antialiasing = FlxG.save.data.antialiasing;
-					stageCurtains.scrollFactor.set(1.3, 1.3);
-					stageCurtains.active = false;
-
-					swagBacks['stageCurtains'] = stageCurtains;
-					toAdd.push(stageCurtains);
+					//DAD STAGE
+					if(curStage == "stage")
+						{
+							var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.loadImage('stagecurtains', 'shared'));
+							stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+							stageCurtains.updateHitbox();
+							stageCurtains.antialiasing = FlxG.save.data.antialiasing;
+							stageCurtains.scrollFactor.set(1.3, 1.3);
+							stageCurtains.active = false;
+		
+							swagBacks['stageCurtains'] = stageCurtains;
+							toAdd.push(stageCurtains);
+						}
 				}
 		}
 	}
