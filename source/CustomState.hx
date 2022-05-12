@@ -48,7 +48,7 @@ class CustomState extends MusicBeatState
                 #if FEATURE_DISCORD
                 // Updating Discord Rich Presence
                 DiscordClient.changePresence(h10,null);
-                #end
+                #end 
             }
 
        var h:String = sys.io.File.getContent("assets/custom/custom_mainmenustates/" + statename + "/enter.txt");
