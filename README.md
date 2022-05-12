@@ -1,6 +1,9 @@
 ![Sten Engine Logo](/art/StenEngineTHENEWLogoBuildPS.png)
 # Friday Night Funkin ' - Sten Engine
 This engine was made for modding the Friday Night Funkin. [More Information](https://gamebanana.com/mods/375364)
+# Sten Engine Links
+[Sten Engine GameBanana Link](https://gamebanana.com/mods/375364)
+[Sten Engine GameJolt Link](https://gamejolt.com/games/stenengine/716503)
 # Sten Engine Web
 https://emrefnfgithub.github.io/
 # Engine Credits
