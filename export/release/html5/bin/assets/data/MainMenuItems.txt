@@ -1,8 +1,0 @@
-story_mode
-freeplay 
-credits 
-youtube 
-minigames 
-donate 
-options 
-mods

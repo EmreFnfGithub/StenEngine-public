@@ -1,2 +1,0 @@
-ModExample:No Mod
-Sten Engine Helper:Help Sten Engine Modding
