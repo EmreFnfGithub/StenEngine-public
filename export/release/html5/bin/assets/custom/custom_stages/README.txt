@@ -1,0 +1,1 @@
+if you are going to make an animated stage, name the animation as "idle"

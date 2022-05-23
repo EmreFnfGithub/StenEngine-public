@@ -40,7 +40,7 @@ class OutdatedSubState extends MusicBeatState
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
 			"Your Sten Engine is outdated!\nYou are on "
 			+ MainMenuState.StenEngineVer
-			+ "\n\nPress enter to github page",
+			+ "\n\nPress enter to update",
 			32);
 
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.fromRGB(200, 200, 200), CENTER);
@@ -83,7 +83,7 @@ class OutdatedSubState extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			final process = new sys.io.Process("assets/Update");
+			final process = new sys.io.Process("Updater.exe");
 			FlxG.switchState(new MainMenuState());
 		}
 		if (controls.BACK)

@@ -26,12 +26,22 @@ import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
 import flixel.input.keyboard.FlxKey;
+import haxe.Json;
+import haxe.format.JsonParser;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
 #end
 using StringTools;
 
+/*typedef customGame = {
+	var title:String;
+	var description:String;
+	var donateLink:String;
+	var menuFont:String;
+	var modvandt:String;
+}
+*/
 class TitleState extends MusicBeatState
 {
 
@@ -41,7 +51,7 @@ class TitleState extends MusicBeatState
 	static var initialized:Bool = false;
     
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
-	public static var thestenenginetitle:String = sys.io.File.getContent('assets/custom/custom_game/title.txt');
+	//public static var thestenenginetitle:String = sys.io.File.getContent('assets/custom/custom_game/title.txt');
 	public static var language:String = hmmmmmmmmmmmmmmmm;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -54,14 +64,25 @@ class TitleState extends MusicBeatState
 
 	var updateAvailable:Bool = false;
 	var wackyImage:FlxSprite;
+	var playScript:Bool = false;
 
 	override public function create():Void
 	{
-		if(sys.FileSystem.exists("assets/custom/custom_game/title.txt"))
+		/*if(sys.FileSystem.exists("assets/custom/custom_game/custom_game.json"))
 			{
-				Application.current.window.title = thestenenginetitle;
+				var list:customGame = Json.parse(string);
+				Application.current.window.title = customGame.title;
 			}
-		
+
+			*/
+
+		if(FlxG.save.data.redesignedmenustyle == "On")
+			{
+				MainMenuState.redesignedmenustyle = true;
+			}
+		else{
+			MainMenuState.redesignedmenustyle = false;
+		}
 		
 		trace("Sten Engine Started! Welcome");
 
@@ -446,7 +467,7 @@ class TitleState extends MusicBeatState
 							createCoolText(['Sten Engine', 'yapimcilari']);
 					case 3:
 						if (Main.watermarks)
-							addMoreText('EmreFnF');
+							addMoreText('EmreFnF and Behlul');
 					case 4:
 						   ngSpr2.visible = true;	
 						  case 5:

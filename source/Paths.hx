@@ -46,6 +46,7 @@ class Paths
 	 * @param library 
 	 * @return BitmapData
 	 */
+
 	static public function loadImage(key:String, ?library:String):FlxGraphic
 	{
 		var path = image(key, library);
@@ -176,6 +177,7 @@ class Paths
 		return doesSoundAssetExist(result) ? result : null;
 	}
 
+             
 	inline static public function inst(song:String)
 	{
 		var songLowercase = StringTools.replace(song, " ", "-").toLowerCase();
@@ -251,6 +253,12 @@ class Paths
 		}
 		return FlxAtlasFrames.fromSparrow(loadImage(key, library), file('images/$key.xml', library));
 	}
+
+	static public function getskinSparrowAtlas(key:String, ?library:String, ?isCharacter:Bool = false)
+		{
+			library = "skins";
+			return FlxAtlasFrames.fromSparrow(loadImage(key, library), file('images/$key.xml', library));
+		}
 
 	static public function getSkinSparrowAtlas(key:String, ?library:String, ?isCharacter:Bool = false)
 		{

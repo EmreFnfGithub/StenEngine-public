@@ -81,4 +81,15 @@ class CoolUtil
 		f.add(bg);
 		return bg;
 	}
+
+	public static function addBG2(f:FlxState) {
+		var p = Paths.image("stageback");
+		if (!Assets.exists(p)) p = Paths.image("stageback");
+		var bg = new FlxSprite(0,0).loadGraphic(p);
+		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.screenCenter();
+		bg.antialiasing = true;
+		f.add(bg);
+		return bg;
+	}
 }

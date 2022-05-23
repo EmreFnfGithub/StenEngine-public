@@ -118,6 +118,13 @@ class OptionsMenu extends FlxSubState
 	{
 		options = [
 			new OptionCata(50, 40, "Gameplay", [
+				new CursedOn("abc"),
+				new CursedOff("abc"),
+				new ReadmeOff("Keyboard sound effect"),
+				new ReadmeOn("Keyboard sound effect"),
+				new KeyboardSoundEffectTwo("Keyboard sound effect"),
+				new RedesignedMenu("Redesigned menu namely Sten Engine Menu"),
+				new RedesignedMenuTwo("Redesigned menu namely Sten Engine Menus"),
                 new EngineUsernameOption("Change your funkin sten engine name (Varies in each mode)"),
 				new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 				new OffsetThing("Change the note audio offset (how many milliseconds a note is offset in a chart)"),

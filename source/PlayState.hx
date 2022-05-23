@@ -179,6 +179,7 @@ class PlayState extends MusicBeatState
 	public static var campaignBads:Int = 0;
 	public static var campaignShits:Int = 0;
 
+	
 	public var accuracy:Float = 0.00;
 
 	private var accuracyDefault:Float = 0.00;
@@ -238,6 +239,8 @@ class PlayState extends MusicBeatState
 	var scoreTxt:FlxText;
 	var judgementCounter:FlxText;
 	var replayTxt:FlxText;
+	var emrefnf:Int = 0;
+	var emrefnftext:FlxText;
 
 	var needSkip:Bool = false;
 	var skipActive:Bool = false;
@@ -478,8 +481,11 @@ class PlayState extends MusicBeatState
 				}
 
 				currentIndex++;
+				
 			}
 		}
+
+
 
 		recalculateAllSectionTimes();
 
@@ -640,6 +646,8 @@ class PlayState extends MusicBeatState
 				camPos.x += 400;
 			case 'pico':
 				camPos.x += 600;
+			case 'tankman':
+				dad.y += 175;
 			case 'senpai':
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 			case 'senpai-angry':
@@ -945,6 +953,26 @@ class PlayState extends MusicBeatState
 
 		iconP2 = new HealthIcon(dad.curCharacter, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
+
+		if(FlxG.save.data.owner == "true")
+			{
+				var account:FlxText = new FlxText(900, FlxG.height - 700, 0,  "👑" + FlxG.save.data.pcplayername, 1112);
+				account.scrollFactor.set();
+				account.setFormat("VCR OSD Mono", 46, FlxColor.YELLOW, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				add(account);
+			}
+			else{
+				var account:FlxText = new FlxText(900, FlxG.height - 700, 0,  FlxG.save.data.pcplayername, 1112);
+				account.scrollFactor.set();
+				account.setFormat("VCR OSD Mono", 46, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				add(account);
+			}
+
+
+	  var account2:FlxText = new FlxText(300, FlxG.height - 700, 0, SONG.player2 + "(Bot)", 1112);
+	  account2.scrollFactor.set();
+	  account2.setFormat("VCR OSD Mono", 46, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+	  add(account2);
 
 		if (FlxG.save.data.healthBar)
 		{
@@ -2016,6 +2044,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		
 		#if !debug
 		perfectMode = false;
 		#end
@@ -2024,8 +2053,9 @@ class PlayState extends MusicBeatState
 		{
 			boyfriend.playAnim('hey');
 		}
-
-
+	    
+		
+		
 		if (!PlayStateChangeables.Optimize)
 			Stage.update(elapsed);
 
@@ -2533,6 +2563,11 @@ class PlayState extends MusicBeatState
 					startSong();
 			}
 		}
+
+		if(FlxG.save.data.cursedmode == "On")
+			{
+				
+			}
 		else
 		{
 			// Conductor.songPosition = FlxG.sound.music.time;
@@ -3903,6 +3938,10 @@ class PlayState extends MusicBeatState
 		if ((KeyBinds.gamepad && !FlxG.keys.justPressed.ANY))
 		{
 			// PRESSES, check for note hits
+			if(FlxG.save.data.keyboardeffect = "On")
+				{
+					FlxG.sound.play(Paths.sound('keyboardpressdwnloadedstephenpog'));
+				}
 			if (pressArray.contains(true) && generatedMusic)
 			{
 				boyfriend.holdTimer = 0;

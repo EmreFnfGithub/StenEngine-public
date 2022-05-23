@@ -1,0 +1,6 @@
+Resume 
+Restart Song 
+Options 
+Chart Editor 
+Change Song 
+Exit to menu

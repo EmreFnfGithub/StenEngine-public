@@ -5,18 +5,8 @@ import polymod.format.ParseRules.LinesParseFormat;
 import polymod.format.ParseRules.TextFileFormat;
 import polymod.Polymod;
 #end
-
-/**
- * Okay now this is epic.
- */
 class ModCore
 {
-	/**
-	 * The current API version.
-	 * Must be formatted in Semantic Versioning v2; <MAJOR>.<MINOR>.<PATCH>.
-	 * 
-	 * Remember to increment the major version if you make breaking changes to mods!
-	 */
 	static final API_VERSION = "0.1.0";
 
 	static final MOD_DIRECTORY = "mods";

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="hmm.png"><SubTexture name="hmm friday night funk0000" x="0" y="0" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0001" x="1286" y="0" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0002" x="0" y="730" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0003" x="1286" y="730" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0004" x="0" y="1460" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0005" x="1286" y="1460" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0006" x="2572" y="0" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+<SubTexture name="hmm friday night funk0007" x="2572" y="730" width="1286" height="730" frameX="0" frameY="0" frameWidth="1286" frameHeight="730" />
+</TextureAtlas>

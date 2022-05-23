@@ -120,6 +120,10 @@ class ChartingState extends MusicBeatState
 	var player2:Character = new Character(0, 0, "dad");
 	var player1:Boyfriend = new Boyfriend(0, 0, "bf");
 
+
+	var char1:Character;
+	var char2:Character;
+
 	public static var leftIcon:HealthIcon;
 
 	var height = 0;
@@ -159,8 +163,11 @@ class ChartingState extends MusicBeatState
 		curSection = lastSection;
 
 		
-		var bg = CoolUtil.addBG(this);
+		var bg = CoolUtil.addBG2(this);
         bg.scrollFactor.set(0, 0);
+
+		
+		
 		
 		
 
@@ -391,7 +398,6 @@ class ChartingState extends MusicBeatState
 		];
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
-
 		UI_box.scrollFactor.set();
 		UI_box.resize(300, 400);
 		UI_box.x = FlxG.width / 2 + 40;
@@ -439,7 +445,14 @@ class ChartingState extends MusicBeatState
 		// add(blackBorder);
 		add(snapText);
 
-		
+		char1 = new Character(929, 230, _song.player1, true);
+		char1.setGraphicSize(Std.int(char1.width * 0.6));
+		char1.scrollFactor.set(0, 0);
+		add(char1);
+		char2 = new Character(0, 30, _song.player2, false);
+		char2.setGraphicSize(Std.int(char2.width * 0.6));
+		char2.scrollFactor.set(0, 0);
+		add(char2);
 
 		super.create();
 	}
@@ -1063,6 +1076,11 @@ class ChartingState extends MusicBeatState
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player1 = characters[Std.parseInt(character)];
+			remove(char1);
+			char1 = new Character(929, 30, _song.player1, true);
+		char1.setGraphicSize(Std.int(char1.width * 0.6));
+		char1.scrollFactor.set(0, 0);
+		add(char1);
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
@@ -1071,6 +1089,12 @@ class ChartingState extends MusicBeatState
 		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player2 = characters[Std.parseInt(character)];
+			remove(char2);
+			char2 = new Character(0, 30, _song.player2, false);
+		    char2.setGraphicSize(Std.int(char2.width * 0.6));
+		    char2.scrollFactor.set(0, 0);
+		    add(char2);
+
 		});
 		player2DropDown.selectedLabel = _song.player2;
 
@@ -1531,7 +1555,7 @@ class ChartingState extends MusicBeatState
 			}
 			else
 			{
-				var diff:String = ["-easy", "", "-hard"][PlayState.storyDifficulty];
+				var diff:String = ["-easy", "", "-hard", "-insane"][PlayState.storyDifficulty];
 				_song = Song.conversionChecks(Song.loadFromJson(PlayState.SONG.songId, diff));
 			}
 		}
@@ -1914,6 +1938,7 @@ class ChartingState extends MusicBeatState
 			FlxG.watch.addQuick("Rendered Notes ", shownNotes.length);
 			#end
 
+			
 			for (i in sectionRenderes)
 			{
 				var diff = i.y - strumLine.y;
@@ -2430,9 +2455,7 @@ class ChartingState extends MusicBeatState
 				+ "\n\nSnap: "
 				+ snap
 				+ "\n"
-				+ (doSnapShit ? "Snap enabled" : "Snap disabled")
-				+
-				(FlxG.save.data.showHelp ? "\n\nHelp:\nCtrl-MWheel : Zoom in/out\nShift-Left/Right :\nChange playback speed\nCtrl-Drag Click : Select notes\nCtrl-C : Copy notes\nCtrl-V : Paste notes\nCtrl-Z : Undo\nDelete : Delete selection\nCTRL-Left/Right :\n  Change Snap\nHold Shift : Disable Snap\nClick or 1/2/3/4/5/6/7/8 :\n  Place notes\nUp/Down :\n  Move selected notes 1 step\nShift-Up/Down :\n  Move selected notes 1 beat\nSpace: Play Music\nEnter : Preview\nPress F1 to hide/show this!" : "");
+				+ (doSnapShit ? "Snap enabled" : "Snap disabled");
 
 			var left = FlxG.keys.justPressed.ONE;
 			var down = FlxG.keys.justPressed.TWO;
@@ -3573,7 +3596,7 @@ class ChartingState extends MusicBeatState
 
 	private function saveLevel()
 	{
-		var difficultyArray:Array<String> = ["-easy", "", "-hard", "insane"];
+		var difficultyArray:Array<String> = ["-easy", "", "-hard", "-insane"];
 
 		var toRemove = [];
 

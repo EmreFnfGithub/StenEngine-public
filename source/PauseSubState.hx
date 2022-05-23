@@ -25,7 +25,7 @@ class PauseSubState extends MusicBeatSubstate
 	public static var goToOptions:Bool = false;
 	public static var goBack:Bool = false;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Options', 'Chart Editor', 'Change Song', 'Exit to menu'];
+	var menuItems:Array<String> = CoolUtil.coolTextFile(Paths.txt('data/PauseSubStateItems')); 
 	var curSelected:Int = 0;
 
 	public static var playingPause:Bool = false;
@@ -250,6 +250,11 @@ class PauseSubState extends MusicBeatSubstate
 					}
 					else
 						FlxG.switchState(new FreeplayState());
+				case "Toggle  Bot  Play":
+					FlxG.save.data.botplay = "on";
+				default:
+					FlxG.switchState(new CustomState());
+					CustomState.statename = menuItems[curSelected];
 			}
 		}
 

@@ -28,15 +28,16 @@ class CharacterTestState extends MusicBeatState
     public static var char1:Character = null;
 	public static var textboxhi:FlxInputText;
 	public static var versionShit:FlxText;
-	public static var notes:FlxSprite;
 	public static var scale:Float = 1;
 
 	var name:Int = 0;
 	var charnamee:String = "dad";
+	var eventName:FlxUIInputText;
+	var notes:FlxSprite;
+	var button:FlxButton;
 	override function create()
 	{
-		
-
+		FlxG.mouse.visible = true;
         var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('stageback'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.10;
@@ -46,7 +47,7 @@ class CharacterTestState extends MusicBeatState
 		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
-		var front:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.loadImage('stagefront', 'shared'));
+		var front:FlxSprite = new FlxSprite(-650, 450).loadGraphic(Paths.loadImage('stagefront', 'shared'));
 		front.setGraphicSize(Std.int(front.width * 1.1));
 		front.updateHitbox();
 	    front.antialiasing = FlxG.save.data.antialiasing;
@@ -56,20 +57,23 @@ class CharacterTestState extends MusicBeatState
 		char1 = new Character(500, 300, "bf", true);
 		char1.setGraphicSize(Std.int(char1.width * 0.8));
 		add(char1);
-		char1.visible = false;
-		
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, name + " Developer Mode - Press p to change char", 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
+		char1.dance();
 
-		var notes:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesidle'));
+		notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesidle'));
 		notes.scale.x = scale;
 		notes.scale.y = scale;
 		notes.screenCenter(X);
-	    add(notes);
+		add(notes);
 		
-		
+		button = new FlxButton(150, 20, "Change Character", OnClickButton);
+        add(button);
+		eventName = new FlxUIInputText(50, 20, 80, "");
+		add(eventName);
+
+		versionShit = new FlxText(5, FlxG.height - 18, 0, "Controls - Zooms E/Q", 12);
+        versionShit.scrollFactor.set();
+        versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        add(versionShit);
 
 
 		super.create();
@@ -77,7 +81,11 @@ class CharacterTestState extends MusicBeatState
 
 	function OnClickButton():Void
 		{
-			
+			remove(char1);
+			char1 = new Character(500, 30, eventName.text, true);
+		    char1.setGraphicSize(Std.int(char1.width * 0.8));
+		    add(char1);
+			char1.dance();
 		}
 	
 	override function update(elapsed:Float)
@@ -94,114 +102,26 @@ class CharacterTestState extends MusicBeatState
 			 char1.dance();
 			 char1.updateHitbox();
 			 char1.visible = true;
+             remove(notes);
+			 notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesidle'));
+			 notes.scale.x = scale;
+			 notes.scale.y = scale;
+			 notes.screenCenter(X);
+			 add(notes);
 		}
 
-		var notes:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesidle'));
-		notes.scale.x = scale;
-		notes.scale.y = scale;
-		notes.screenCenter(X);
-	    add(notes);
-
-		if(FlxG.keys.justPressed.P)
-			{
-				name++;
-			
-			if(name == 1)
-				{
-					charnamee = "dad";
-				}
-	
-				if(name == 2)
-				{
-				   charnamee = "spooky";
-				}
-	
-				if(name == 3)
-				{
-					   charnamee = "pico";
-				}
-	
-				if(name == 4)
-				{
-					   charnamee = "mom";
-				}
-	
-				if(name == 5)
-				{
-					   charnamee = "gf";
-				}
-	
-				if(name == 6)
-				{
-						charnamee = "monster";
-				}
-	
-				if(name == 7)
-				{
-						charnamee = "senpai-angry";
-				}
-	
-				if(name == 8)
-				{
-						charnamee = "parents-christmas";
-				}	
-				
-				if(name == 9)
-				{
-						charnamee = "senpai";
-				}	
-	
-				if(name == 10)
-					{
-						charnamee = "spirit";
-					}	
-	
-				if(name == 11)
-					{
-						name = 0;
-						charnamee = "bf";
-							
-					}	
-			
-
-			var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('stageback'));
-		    bg.scrollFactor.x = 0;
-		    bg.scrollFactor.y = 0.10;
-		    bg.setGraphicSize(Std.int(bg.width * 1.1));
-		    bg.updateHitbox();
-		    bg.screenCenter();
-		    bg.antialiasing = FlxG.save.data.antialiasing;
-		    add(bg);
-
-            var front:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.loadImage('stagefront', 'shared'));
-		    front.setGraphicSize(Std.int(front.width * 1.1));
-		    front.updateHitbox();
-	        front.antialiasing = FlxG.save.data.antialiasing;
-		    front.scrollFactor.set(0.9, 0.9);
-            add(front);
-
-		char1 = new Character(500, 300, charnamee, true);
-		char1.setGraphicSize(Std.int(char1.width * 0.8));
-		add(char1);
-		char1.visible = false;
-
-
-        var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, name + " Developer Mode - Press p to change char", 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
-
-
-
-			
-			}
-	
 
 		if(FlxG.keys.justPressed.DOWN) 
 			{
 				 char1.playAnim('singDOWN');
 				 char1.updateHitbox();
 				 char1.visible = true;
+				 remove(notes);
+				 notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesdown'));
+				 notes.scale.x = scale;
+				 notes.scale.y = scale;
+				 notes.screenCenter(X);
+				 add(notes);
 			}
 
 		if(FlxG.keys.justPressed.LEFT) 
@@ -209,18 +129,44 @@ class CharacterTestState extends MusicBeatState
 					 char1.playAnim('singLEFT');
 					 char1.updateHitbox();
 					 char1.visible = true;
+					 remove(notes);
+					 notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesleft'));
+					 notes.scale.x = scale;
+					 notes.scale.y = scale;
+					 notes.screenCenter(X);
+					 add(notes);
 			}
 		if(FlxG.keys.justPressed.RIGHT) 
 			{
 					char1.playAnim('singRIGHT');
 					char1.updateHitbox();
 					char1.visible = true;
+                    remove(notes);
+					notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesright'));
+					notes.scale.x = scale;
+					notes.scale.y = scale;
+					notes.screenCenter(X);
+					add(notes);
 			}
 		if(FlxG.keys.justPressed.UP) 
 			{
 					char1.playAnim('singUP');
 					char1.updateHitbox();
 					char1.visible = true;
+					remove(notes);
+					notes = new FlxSprite(0, 0).loadGraphic(Paths.loadImage('notes/notesup'));
+					notes.scale.x = scale;
+					notes.scale.y = scale;
+					notes.screenCenter(X);
+					add(notes);
+			}
+		if (FlxG.keys.pressed.E) 
+			{
+				FlxG.camera.zoom += elapsed * FlxG.camera.zoom;
+			}
+		if (FlxG.keys.pressed.Q) 
+			{
+				FlxG.camera.zoom -= elapsed * FlxG.camera.zoom;
 			}
 
 			super.update(elapsed);

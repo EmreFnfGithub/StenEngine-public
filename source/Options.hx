@@ -693,6 +693,297 @@ class EngineUsernameOption extends Option
 		}
 }
 
+class KeyboardSoundEffect extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "if you turn it on, it will sound every time you press the note";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.keyboardeffect = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.keyboardeffect = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Set Keyboard Sound Effect On (soon)";
+		}
+}
+
+class ReadmeOff extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "No description";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.readmehm = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.readmehm = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Readme Off";
+		}
+}
+
+class ReadmeOn extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "No description";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.readmehm = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.readmehm = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Readme On";
+		}
+}
+
+
+class CursedOn extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "No description";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.cursedmode = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.cursedmode = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Cursed Mode On";
+		}
+}
+
+class CursedOff extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "No description";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.cursedmode = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.cursedmode = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Cursed Mode Off";
+		}
+}
+
+
+class KeyboardSoundEffectTwo extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "if you turn it on, it will sound every time you press the note";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.keyboardeffect = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.keyboardeffect = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Set Keyboard Sound Effect Off (soon)";
+		}
+}
+
+class RedesignedMenu extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "This option cannot be toggled in the pause menu.";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.redesignedmenustyle = "On";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.redesignedmenustyle = "On";
+			display = updateDisplay();
+			return true;
+		}
+
+		public override function press():Bool
+			{
+				if (OptionsMenu.isInPause)
+					return false;
+				FlxG.save.data.redesignedmenustyle = "On";
+				display = updateDisplay();
+				return true;
+			}
+	
+		private override function updateDisplay():String
+		{
+			return "Set Menu Style On";
+		}
+}
+
+class RedesignedMenuTwo extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			if (OptionsMenu.isInPause)
+				description = "This option cannot be toggled in the pause menu.";
+			else
+				description = desc;
+		}
+	
+		public override function left():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.redesignedmenustyle = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		public override function right():Bool
+		{
+			if (OptionsMenu.isInPause)
+				return false;
+			FlxG.save.data.redesignedmenustyle = "Off";
+			display = updateDisplay();
+			return true;
+		}
+	
+		private override function updateDisplay():String
+		{
+			return "Set Menu Style Off";
+		}
+}
+
 class GhostTapOption extends Option
 {
 	public function new(desc:String)

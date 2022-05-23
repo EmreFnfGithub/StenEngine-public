@@ -26,11 +26,9 @@ import Discord.DiscordClient;
 
 using StringTools;
 
-
 class FreeplayState extends MusicBeatState
 {
 	public static var songs:Array<FreeplaySongMetadata> = [];
-	public static var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.loadImage('menuBGBlue'));
 
 	var selector:FlxText;
 
@@ -47,6 +45,12 @@ class FreeplayState extends MusicBeatState
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 	var combo:String = '';
+	var bg:FlxSprite;
+
+	var difficultySelectors:FlxTypedGroup<FlxSprite>;
+	var sprDifficulty:FlxSprite;
+	var leftArrow:FlxSprite;
+	var rightArrow:FlxSprite;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -147,11 +151,10 @@ class FreeplayState extends MusicBeatState
 
 		// LOAD CHARACTERS
 
-		
+		bg = new FlxSprite().loadGraphic(Paths.loadImage('menuBGBlue'));
 		bg.antialiasing = FlxG.save.data.antialiasing;
 		add(bg);
 
-	
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
 
@@ -201,49 +204,37 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
-		bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
 		
-		if(songs[curSelected].songCharacter == "dad")
-			{
-				bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
-			}
-			
-		if(songs[curSelected].songCharacter == "gf")
-			{
-					bg.loadGraphic(Paths.loadImage('gffreeplayimage'));
-			}
-		if(songs[curSelected].songCharacter == "spooky")
-			{
-					bg.loadGraphic(Paths.loadImage('spookyfreeplayimage'));
-			}
-		if(songs[curSelected].songCharacter == "pico")
-			{
-						bg.loadGraphic(Paths.loadImage('picofreeplayimage'));
-			}	
-		if(songs[curSelected].songCharacter == "mom")
-			{
-						bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-			}		
-		if(songs[curSelected].songCharacter == "mom-car")
-			{
-						bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-			}	
-		if(songs[curSelected].songCharacter == "senpai")
-			{
-						bg.loadGraphic(Paths.loadImage('senpaifreeplayimage'));
-			}	
-		if(songs[curSelected].songCharacter == "monster")
-			{
-						bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-			}		
-		if(songs[curSelected].songCharacter == "monster-christmas")
-			{
-						bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-			}		
-		if(songs[curSelected].songCharacter == "spirit")
-				{
-							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-				}		
+		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		difficultySelectors = new FlxTypedGroup<FlxSprite>();
+		add(difficultySelectors);
+
+		leftArrow = new FlxSprite(700, 0);
+		leftArrow.frames = ui_tex;
+		leftArrow.animation.addByPrefix('idle', "arrow left");
+		leftArrow.animation.addByPrefix('press', "arrow push left");
+		leftArrow.animation.play('idle');
+		difficultySelectors.add(leftArrow);
+
+		leftArrow.y = FlxG.height - leftArrow.height - 30;
+
+		sprDifficulty = new FlxSprite(leftArrow.x + 50, leftArrow.y);
+		sprDifficulty.frames = ui_tex;
+		sprDifficulty.animation.addByPrefix('easy', 'EASY');
+		sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
+		sprDifficulty.animation.addByPrefix('hard', 'HARD');
+		sprDifficulty.animation.addByPrefix('insane', 'INSANE');
+		sprDifficulty.animation.play('easy');
+		// changeDifficulty();
+
+		difficultySelectors.add(sprDifficulty);
+
+		rightArrow = new FlxSprite(sprDifficulty.x + sprDifficulty.width + 50, leftArrow.y);
+		rightArrow.frames = ui_tex;
+		rightArrow.animation.addByPrefix('idle', 'arrow right');
+		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
+		rightArrow.animation.play('idle');
+		difficultySelectors.add(rightArrow);
 
 		changeSelection();
 		changeDiff();
@@ -297,7 +288,7 @@ class FreeplayState extends MusicBeatState
 				Debug.displayAlert(meta.songName + " Chart", "No difficulties found for chart, skipping.");
 			}
 			#else
-			diffsThatExist = ["Easy", "Normal", "Hard", "Insane"];
+			diffsThatExist = ["Easy", "Normal", "Hard", 'Insane'];
 			#end
 
 			if (diffsThatExist.contains("Easy"))
@@ -403,100 +394,17 @@ class FreeplayState extends MusicBeatState
 			// openSubState(new DiffOverview());
 		}
 
-		
-
 		if (upP)
 		{
 			changeSelection(-1);
-			if(songs[curSelected].songCharacter == "dad")
-				{
-					bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
-				}
-				
-			if(songs[curSelected].songCharacter == "gf")
-				{
-						bg.loadGraphic(Paths.loadImage('gffreeplayimage'));
-				}
-			if(songs[curSelected].songCharacter == "spooky")
-				{
-						bg.loadGraphic(Paths.loadImage('spookyfreeplayimage'));
-				}
-			if(songs[curSelected].songCharacter == "pico")
-				{
-							bg.loadGraphic(Paths.loadImage('picofreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "mom")
-				{
-							bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-				}		
-			if(songs[curSelected].songCharacter == "mom-car")
-				{
-							bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "senpai")
-				{
-							bg.loadGraphic(Paths.loadImage('senpaifreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "monster")
-				{
-							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-				}		
-			if(songs[curSelected].songCharacter == "monster-christmas")
-				{
-							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-				}		
-			if(songs[curSelected].songCharacter == "spirit")
-					{
-								bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-					}		
 		}
 		if (downP)
 		{
 			changeSelection(1);
-			if(songs[curSelected].songCharacter == "dad")
-				{
-					bg.loadGraphic(Paths.loadImage('dadfreeplayimage'));
-				}
-				
-			if(songs[curSelected].songCharacter == "gf")
-				{
-						bg.loadGraphic(Paths.loadImage('gffreeplayimage'));
-				}
-			if(songs[curSelected].songCharacter == "spooky")
-				{
-						bg.loadGraphic(Paths.loadImage('spookyfreeplayimage'));
-				}
-			if(songs[curSelected].songCharacter == "pico")
-				{
-							bg.loadGraphic(Paths.loadImage('picofreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "mom")
-				{
-							bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-				}		
-			if(songs[curSelected].songCharacter == "mom-car")
-				{
-							bg.loadGraphic(Paths.loadImage('momfreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "senpai")
-				{
-							bg.loadGraphic(Paths.loadImage('senpaifreeplayimage'));
-				}	
-			if(songs[curSelected].songCharacter == "monster")
-				{
-							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-				}		
-			if(songs[curSelected].songCharacter == "monster-christmas")
-				{
-							bg.loadGraphic(Paths.loadImage('monsterfreeplayimage'));
-				}		
-				
 		}
 
 		// if (FlxG.keys.justPressed.SPACE && !openedPreview)
 		// openSubState(new DiffOverview());
-
-	
 
 		if (FlxG.keys.pressed.SHIFT)
 		{
@@ -658,7 +566,7 @@ class FreeplayState extends MusicBeatState
 		curDifficulty += change;
 
 		if (curDifficulty < 0)
-			curDifficulty = 3;
+			curDifficulty = 2;
 		if (curDifficulty > 3)
 			curDifficulty = 0;
 
@@ -672,6 +580,21 @@ class FreeplayState extends MusicBeatState
 				songHighscore = 'Philly';
 			case 'M.I.L.F':
 				songHighscore = 'Milf';
+		}
+		switch (curDifficulty)
+		{
+			case 0:
+				sprDifficulty.animation.play('easy');
+				sprDifficulty.offset.x = 20;
+			case 1:
+				sprDifficulty.animation.play('normal');
+				sprDifficulty.offset.x = 70;
+			case 2:
+				sprDifficulty.animation.play('hard');
+				sprDifficulty.offset.x = 20;
+			case 3:
+				sprDifficulty.animation.play('insane');
+				sprDifficulty.offset.x = 20;
 		}
 
 		#if !switch
@@ -693,6 +616,9 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length)
 			curSelected = 0;
 
+		remove(bg);
+		bg.loadGraphic(Paths.loadImage("songImages/" + songs[curSelected].songName + "freeplayimage"));
+		add(bg);
 		if (songs[curSelected].diffs.length != 3)
 		{
 			switch (songs[curSelected].diffs[0])

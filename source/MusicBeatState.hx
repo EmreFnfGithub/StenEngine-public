@@ -180,6 +180,7 @@ class MusicBeatState extends FlxUIState
 		curBeat = Math.floor(curStep / 4);
 	}
 
+	
 	private function updateCurStep():Int
 	{
 		var lastChange:BPMChangeEvent = {
@@ -241,4 +242,6 @@ class MusicBeatState extends FlxUIState
 		Debug.logTrace("IM BACK!!!");
 		(cast(Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 	}
+
+	
 }

@@ -29,6 +29,7 @@ class EngineEditorsState extends MusicBeatState
 {
 	var optionShit:Array<String> = 
 	[/*'Custom State Editor',*/
+	'Stage Editor',
 	'Character Editor',
 	'Week Editor',
 	'Chart Editor',
@@ -165,6 +166,9 @@ class EngineEditorsState extends MusicBeatState
 					/*case 'Custom State Editor':
 						LoadingState.loadAndSwitchState(new CustomStateEditor());
 						*/
+
+					case 'Stage Editor':
+						LoadingState.loadAndSwitchState(new StageEditor());
 
 					case 'Character Editor':
 						LoadingState.loadAndSwitchState(new MainMenuState());
