@@ -334,7 +334,7 @@ class MainMenuState extends MusicBeatState
 					}
                 
 
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer + " Press F to Funkin Media", 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer, 12);
 				versionShit.scrollFactor.set();
 				versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShitTwo.json'))
@@ -568,12 +568,6 @@ class MainMenuState extends MusicBeatState
 						{
 							openSubState(new EditorsMain());
 							Editorsmainyes = true;
-						}
-
-			
-						if (FlxG.keys.justPressed.F)
-						{
-							FlxG.switchState(new funkinMedia.FunkinMedia());
 						}
 			
 						if (FlxG.keys.justPressed.DOWN)
