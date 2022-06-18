@@ -1,7 +1,8 @@
 #if FEATURE_STEPMANIA
 package smTools;
-
+#if sys
 import sys.io.File;
+#end
 import haxe.Exception;
 import lime.app.Application;
 import Section.SwagSection;

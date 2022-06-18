@@ -1,5 +1,8 @@
 package;
 
+import hscript.Expr;
+import hscript.Parser;
+import hscript.Interp;
 import flixel.input.gamepad.FlxGamepad;
 import Controls.KeyboardScheme;
 import flixel.FlxG;
@@ -19,7 +22,10 @@ import flixel.util.FlxTimer;
 import lime.app.Application;
 import miniGames.MiniGamesState;
 import funkinMedia.FunkinMedia;
+#if sys
 import sys.io.Process;
+import sys.io.Process;
+#end
 import flixel.FlxSubState;
 #if FEATURE_DISCORD
 import Discord.DiscordClient;
@@ -34,7 +40,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
-import sys.io.Process;
+import stenEngine.EngineConsole;
+import stenEngine.EngineMain;
 
 
 using StringTools;
@@ -42,7 +49,6 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
-	public static var donateLink:String = sys.io.File.getContent('assets/custom/custom_game/donateLink.txt');
 	public static var language:String = hmmmmmmmmmmmmmmmm;
 	public static var Editorsnull:Bool = false;
 	public static var redesignedmenustyle = false;
@@ -58,7 +64,7 @@ class MainMenuState extends MusicBeatState
 	var textt4:FlxText;
 	var button:FlxButton;
 	var button2:FlxButton;
-	var Editorsmainyes:Bool = false;
+	public static var Editorsmainyes:Bool = false;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
@@ -79,10 +85,12 @@ class MainMenuState extends MusicBeatState
 
 	public static var firstStart:Bool = true;
 
+	public static var interp:Interp;
+
 	public static var nightly:String = "";
 
-	public static var StenEngineVer:String = "0.7 Release" + nightly;
-	public static var gameVer:String = "0.2.7.1";
+	public static var StenEngineVer:String = "1.0.0" + nightly;
+	public static var gameVer:String = "0.2.8";
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -104,15 +112,19 @@ class MainMenuState extends MusicBeatState
 		
 		clean();
 		PlayState.inDaPlay = false;
-		#if FEATURE_DISCORD
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+		stenEngine.EngineMain.discordClient('In the Menus');
 
-		if (!FlxG.sound.music.playing)
-		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		if(FlxG.save.data.menuMusic == null)
+			{
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			}
+		else{
+			if (!FlxG.sound.music.playing)
+				{
+					FlxG.sound.playMusic(Paths.music(FlxG.save.data.menuMusic));
+				}
 		}
+
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -130,7 +142,13 @@ class MainMenuState extends MusicBeatState
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = FlxG.save.data.antialiasing;
-		bg.color = FlxG.random.color();
+		if(FlxG.save.data.coloredmenubg == "On")
+			{
+				bg.color = FlxG.random.color();
+			}
+		else{
+			bg.loadGraphic(Paths.loadImage('menuBG'));
+		}
 		add(bg);
 
 		if(redesignedmenustyle == true)
@@ -209,7 +227,48 @@ class MainMenuState extends MusicBeatState
 		else{
 
 		}
-		
+
+		var expr = sys.io.File.getContent("assets/custom/custom_states/MainMenuState.hx");
+        //HScript
+						var parser = new hscript.Parser();
+						interp = new Interp();
+						var ast = parser.parseString(expr);
+						interp.variables.set("add", add);
+                        interp.variables.set("remove", remove);
+                        interp.variables.set("DiscordClient", DiscordClient);
+                        interp.variables.set("FlxG", flixel.FlxG);
+                        interp.variables.set("CustomState", CustomState);
+                        interp.variables.set("MenuItem", MenuItem);
+                        interp.variables.set("Character", Character);
+                        interp.variables.set("FlxGame", flixel.FlxGame);
+						interp.variables.set("FlxObject", flixel.FlxObject);
+						interp.variables.set("FlxSprite", flixel.FlxSprite);
+						interp.variables.set("FlxState", flixel.FlxState);
+						interp.variables.set("FlxSubState", flixel.FlxSubState);
+						interp.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
+						interp.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
+						interp.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
+						interp.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
+						interp.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
+						interp.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
+						interp.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
+						interp.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
+                        interp.variables.set("FlxMath", flixel.math.FlxMath);
+						interp.variables.set("FlxPoint", flixel.math.FlxPoint);
+						interp.variables.set("FlxRect", flixel.math.FlxRect);
+						interp.variables.set("MusicBeatState", MusicBeatState);
+						interp.variables.set("FlxSound", flixel.system.FlxSound);
+						interp.variables.set("FlxText", flixel.text.FlxText);
+						interp.variables.set("FlxEase", flixel.tweens.FlxEase);
+						interp.variables.set("FlxTween", flixel.tweens.FlxTween);
+						interp.variables.set("update", function(elapsed:Float)
+						{
+						});
+						interp.variables.set("create", function()
+						{
+						});
+
+                        
 
 		var scale:Float = 1;
 		/*if(optionShit.length > 6) {
@@ -235,6 +294,7 @@ class MainMenuState extends MusicBeatState
 			if(optionShit.length < 6) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
 			menuItem.antialiasing = true;
+			interp.variables.set("items", menuItem);
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
 				
@@ -246,8 +306,10 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollowPos, null, 0.60 * (60 / FlxG.save.data.fpsCap));
 		
 		var hmain:Int = 0;
-		var h11 = sys.io.File.getContent("assets/custom/custom_game/mainMenuFont.txt");
-		var h10 = sys.io.File.getContent("assets/custom/custom_game/modversionandtext.txt");
+		var jsonData = Paths.loadCustomGameJson("custom_game");
+		var data:TitleState.CustomGameJson = cast jsonData;
+		var h11 = data.mainMenuFont;
+		var h10 = data.modversionandtext;
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 49, 0, h10, 12);
         versionShit.scrollFactor.set();
         versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -258,15 +320,32 @@ class MainMenuState extends MusicBeatState
 			{
 				
 				
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 33, 0, "Sten Engine Version : " + StenEngineVer, 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 33, 0, "Sten Engine v" + StenEngineVer, 12);
                 versionShit.scrollFactor.set();
                 versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-                add(versionShit);
+				if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShit.json'))
+					{
+						var readingVershit:String = sys.io.File.getContent('assets/scripts/mainMenu/versionShit.json');
+						if(readingVershit == "add(FlxText);")
+							{
+								add(versionShit);
+							}
+						
+					}
+                
 
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF Version : " + gameVer + " Press F to Funkin Media", 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer + " Press F to Funkin Media", 12);
 				versionShit.scrollFactor.set();
 				versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-				add(versionShit);
+				if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShitTwo.json'))
+					{
+						var readingVershit:String = sys.io.File.getContent('assets/scripts/mainMenu/versionShitTwo.json');
+						if(readingVershit == "add(FlxText);")
+							{
+								add(versionShit);
+							}
+						
+					}
 			}
 	
 		if(language == "tr")
@@ -279,19 +358,36 @@ class MainMenuState extends MusicBeatState
 				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "E ye basarak editorlere ve ya modlara gir - FNF Surumu : " + gameVer + " F e basarak Funkin Mediaya gir", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);}
+		if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShit.json'))
+			{
+				var readingVershit:String = sys.io.File.getContent('assets/scripts/mainMenu/versionShit.json');
+				if(readingVershit == "add(FlxText);")
+					{
+						add(versionShit);
+					}
+				
+			}
+		}
 
 		if(language == "ru")
 			{	
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Sten Engine Version : " + StenEngineVer, 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Sten Engine v" + StenEngineVer, 12);
                 versionShit.scrollFactor.set();
                 versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
                 add(versionShit);
 
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF Version : " + gameVer + " Press F to Funkin Media", 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer + " Press F to Funkin Media", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);}
+		if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShitTwo.json'))
+			{
+				var readingVershit:String = sys.io.File.getContent('assets/scripts/mainMenu/versionShitTwo.json');
+				if(readingVershit == "add(FlxText);")
+					{
+						add(versionShit);
+					}
+				
+			}}
 		
 
 		
@@ -312,6 +408,10 @@ class MainMenuState extends MusicBeatState
 			controls.setKeyboardScheme(KeyboardScheme.Duo(true), true);
 
 		changeItem();
+
+		interp.execute(ast);
+        trace( interp.execute(program) ); 
+        callOnHscript("create");
 
 		super.create();
 	}
@@ -440,6 +540,19 @@ class MainMenuState extends MusicBeatState
 							selec.text = optionShit[curSelected] + "";
 						}
 
+						if (FlxG.keys.justPressed.W)
+							{
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+								changeItem(-1);
+								selec.text = optionShit[curSelected] + "";
+							}
+
+						if (FlxG.keys.justPressed.TAB)
+							{
+								openSubState(new stenEngine.EngineConsole());
+								Editorsmainyes = true;
+							}
+
 						if (FlxG.keys.justPressed.H)
 							{
 								FlxG.switchState(new NotePad());
@@ -469,17 +582,55 @@ class MainMenuState extends MusicBeatState
 							changeItem(1);
 							selec.text = optionShit[curSelected] + "";
 						}
+
+						if (FlxG.keys.justPressed.S)
+							{
+								FlxG.sound.play(Paths.sound('scrollMenu'));
+								changeItem(1);
+								selec.text = optionShit[curSelected] + "";
+							}
 			
 						if (controls.BACK)
 						{
-							FlxG.switchState(new TitleState());
+							if(sys.FileSystem.exists('assets/scripts/mainMenu/Events/back.json'))
+								{
+							var readSwitch:String = sys.io.File.getContent('assets/scripts/mainMenu/Events/back.json');
+							if(readSwitch == "switch TitleState")
+								{
+									FlxG.switchState(new TitleState());
+								}
+							if(readSwitch == "switch MainMenuState")
+								{
+									FlxG.switchState(new MainMenuState());
+								}
+							if(readSwitch == "switch FreeplayState")
+								{
+									FlxG.switchState(new FreeplayState());
+								}
+							if(readSwitch == "switch CreditsState")
+								{
+									FlxG.switchState(new CreditsState());
+								}
+							if(readSwitch == "switch EngineEditorsState")
+								{
+									FlxG.switchState(new EngineEditorsState());
+								}
+							if(readSwitch == "switch Options")
+								{
+									FlxG.switchState(new options.MenuOptions());
+								}
+							if(readSwitch == "switch OptionsOld")
+								{
+									FlxG.switchState(new OptionsDirect());
+								}
+							}
 						}
 			
 						if (controls.ACCEPT)
 						{
 							if (optionShit[curSelected] == 'donate')
 							{
-								CoolUtil.browserLoad(donateLink);
+								CoolUtil.browserLoad("https://ninja-muffin24.itch.io/funkin");
 							}
 							else
 							{
@@ -524,6 +675,11 @@ class MainMenuState extends MusicBeatState
 									}
 								});
 							}
+
+							if (optionShit[curSelected] == 'youtube')
+								{
+									CoolUtil.browserLoad("https://www.youtube.com/channel/UCCxaEq2BskVtiYtAfx_lBXA");
+								}
 			
 						}
 					}
@@ -546,10 +702,6 @@ class MainMenuState extends MusicBeatState
 			
 		});
 	}
-	function stageEditorFunc()
-		{
-			FlxG.switchState(new StageEditor());
-		}
 	function goToState()
 	{
 		var daChoice:String = optionShit[curSelected];
@@ -561,25 +713,27 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new StoryMenuState());
 				
 			case 'freeplay':
-				FlxG.switchState(new FreeplayState());
+				FlxG.switchState(new FreePSelector());
 
 			case 'credits':
 				FlxG.switchState(new CreditsState());
 
 			case 'options':
 				FlxG.switchState(new options.MenuOptions());
+				//options.MenuOptions.ispause = false;
 
             case 'mods':
 				FlxG.switchState(new ModsMenuState());
-
-			case 'youtube':
-				CoolUtil.browserLoad('https://www.youtube.com/channel/UCCxaEq2BskVtiYtAfx_lBXA');
 
             case 'minigames':
 				FlxG.switchState(new miniGames.MiniGamesState());
 				miniGames.MiniGamesState.h = "mainmenu";
 
 			default:
+				if(daChoice == "youtube")
+					{
+						
+					}
 				FlxG.switchState(new CustomState());
 				CustomState.statename = optionShit[curSelected];
 
@@ -598,8 +752,8 @@ class MainMenuState extends MusicBeatState
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.animation.play('idle');
-			spr.scale.x = 0.8;
-			spr.scale.y = 0.8;
+			spr.scale.x = 0.9;
+			spr.scale.y = 0.9;
 			spr.updateHitbox();
 
 			if (spr.ID == curSelected)
@@ -607,8 +761,8 @@ class MainMenuState extends MusicBeatState
 				spr.animation.play('selected');
              
 
-				spr.scale.x = 1.0;
-				spr.scale.y = 1.0;
+				spr.scale.x = 1.1;
+				spr.scale.y = 1.1;
 				var add:Float = 0;
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;
@@ -619,4 +773,29 @@ class MainMenuState extends MusicBeatState
 			}
 		});
 	}
+
+	public function callOnHscript(functionToCall:String, ?params:Array<Any>):Dynamic
+        {
+            if (interp == null)
+            {
+                return null;
+            }
+            if (interp.variables.exists(functionToCall))
+            {
+                var functionH = interp.variables.get(functionToCall);
+                if (params == null)
+                {
+                    var result = null;
+                    result = functionH();
+                    return result;
+                }
+                else
+                {
+                    var result = null;
+                    result = Reflect.callMethod(null, functionH, params);
+                    return result;
+                }
+            }
+            return null;
+        }
 }

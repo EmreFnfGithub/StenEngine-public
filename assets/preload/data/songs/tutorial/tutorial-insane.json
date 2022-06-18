@@ -2,6 +2,7 @@
  "song": {
   "songName": "tutorial",
   "songId": "tutorial",
+  "stage": "stage",
   "player1": "bf",
   "player2": "gf",
   "notes": [

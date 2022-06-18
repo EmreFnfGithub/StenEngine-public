@@ -28,26 +28,40 @@ using StringTools;
 
 class MenuOptions extends MusicBeatState
 {
+    var description:String;
     private var grpOptions:FlxTypedGroup<Alphabet>;
-    var options:Array<String> = ['Gameplay', 'Appearance', 'Misc', 'Saves', 'Real Options'];
+    var options:Array<String> = ['Language', 'Gameplay', 'Appearance', 'Misc', 'Saves', 'Real Options'];
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
+    var icon:String;
+    var descText:FlxText;
+    var iconArray:Array<HealthIcon> = [];
+    var optionText:Alphabet;
 
 	function optionEnter(label:String) {
 		switch(label) {
+            case 'Language':
+				FlxG.switchState(new options.LanguageState());
+                description = "Your Friday Night Language";
 			case 'Gameplay':
-				FlxG.switchState(new GamePlaySub());
+				FlxG.switchState(new options.GamePlaySub());
+                description = "Gameplay option";
 			case 'Appearance':
 				openSubState(new options.AppearanceSub());
+                description = "Appearance";
 			case 'Misc':
-				openSubState(new options.MiscSub());
+				FlxG.switchState(new options.MiscState());
+                description = "Misc";
 			case 'Saves':
-				openSubState(new options.SavesSub());
+				FlxG.switchState(new options.SavesState());
+                description = "Your PC FNF Option";
             case 'Real Options':
                 FlxG.switchState(new OptionsDirect());
+                description = "Old Options";
 		}
 	}
 
+   
     var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
 
@@ -86,10 +100,12 @@ class MenuOptions extends MusicBeatState
 
             for (i in 0...options.length)
                 {
-                    var optionText:Alphabet = new Alphabet(0, 0, options[i], true, false);
-                    optionText.screenCenter();
+                    optionText = new Alphabet(0, (70 * i), options[i], true, false, true);
+                    optionText.isMenuItem = true;
+                    optionText.targetY = i;
                     optionText.y += (100 * (i - (options.length / 2))) + 50;
                     grpOptions.add(optionText);
+                    
                 }
                 
             selectorLeft = new Alphabet(0, 0, '>', true, false);
@@ -143,7 +159,9 @@ class MenuOptions extends MusicBeatState
             for (item in grpOptions.members) {
                 item.targetY = bullShit - curSelected;
                 bullShit++;
-    
+
+
+
                 item.alpha = 0.6;
                 if (item.targetY == 0) {
                     item.alpha = 1;

@@ -2024,8 +2024,6 @@ class LockWeeksOption extends Option
 			display = updateDisplay();
 			return true;
 		}
-		FlxG.save.data.weekUnlocked = 1;
-		StoryMenuState.weekUnlocked = [true, true];
 		confirm = false;
 		trace('Weeks Locked');
 		display = updateDisplay();
@@ -2131,6 +2129,9 @@ class ResetSettings extends Option
 		FlxG.save.data.flashing = null;
 		FlxG.save.data.resetButton = null;
 		FlxG.save.data.botplay = null;
+		FlxG.save.data.muteBind = "0";
+		FlxG.save.data.volUpBind = "+";
+		FlxG.save.data.volDownBind = "-";
 		FlxG.save.data.cpuStrums = null;
 		FlxG.save.data.strumline = null;
 		FlxG.save.data.customStrumLine = null;

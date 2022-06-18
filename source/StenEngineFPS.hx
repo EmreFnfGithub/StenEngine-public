@@ -113,6 +113,8 @@ class StenEngineFPS extends TextField
 		{
 			text = (FlxG.save.data.fps ? "FPS: "
 				+ currentFPS
+				+ "\n"
+				+ "Friday Night Funkin' " + MainMenuState.gameVer
 				+ (Main.watermarks ? "\nSten Engine Release " : "") : (Main.watermarks ? "Sten Engine Release " : ""));
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))

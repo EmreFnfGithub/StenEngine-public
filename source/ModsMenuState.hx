@@ -82,7 +82,6 @@ class ModsMenuState extends MusicBeatState
 		modIcon = new FlxSprite(870, 180).loadGraphic('mods/' + mods[curSelected].modName + '/icon.png');
 		modIcon.setGraphicSize(Std.int(modIcon.width * 0.8));
 		add(modIcon);
-		modIcon.visible = false;
 
 		grpMods = new FlxTypedGroup<Alphabet>();
 		add(grpMods);
@@ -132,15 +131,17 @@ class ModsMenuState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(-shiftMult);
+			remove(modIcon);
 			modIcon.loadGraphic('mods/' + mods[curSelected].modName + '/icon.png');
-			modIcon.visible = true;
+			add(modIcon);
 		}
 		if (downP)
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			changeSelection(shiftMult);
+			remove(modIcon);
 			modIcon.loadGraphic('mods/' + mods[curSelected].modName + '/icon.png');
-			modIcon.visible = true;
+			add(modIcon);
 		}
 
 		if (controls.BACK)

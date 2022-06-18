@@ -31,7 +31,7 @@ using StringTools;
 class EditorsMainButton extends FlxButton{
 
 }
-class EditorsMain extends FlxSubState
+class EditorsMain extends MusicBeatSubstate
 {
     var bg2:FlxSprite;
     var bg3:FlxSprite;
@@ -51,35 +51,51 @@ class EditorsMain extends FlxSubState
 		add(bg);
         FlxG.mouse.visible = true;
         var button2:FlxButton = new FlxButton(35, 105, "Stage Editor", function(){
-			FlxG.switchState(new StageEditor());
+			MainMenuState.Editorsmainyes = false;
+			FlxG.switchState(new engineEditors.StageEditor());
 		});
         add(button2);
 
 		var button3:FlxButton = new FlxButton(35, 130, "Character E", function(){
+			MainMenuState.Editorsmainyes = false;
 			MainMenuState.Editorsnull = true;
 			FlxG.switchState(new MainMenuState());
 		});
         add(button3);
 
 		var button4:FlxButton = new FlxButton(35, 155, "Week Editor", function(){
+			MainMenuState.Editorsmainyes = false;
 			MainMenuState.Editorsnull = true;
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new engineEditors.WeekEditor());
 		});
         add(button4);
 
 		var button5:FlxButton = new FlxButton(35, 180, "Mini Games", function(){
+			MainMenuState.Editorsmainyes = false;
 			FlxG.switchState(new miniGames.MiniGamesState());
 		});
         add(button5);
 
-		var button6:FlxButton = new FlxButton(35, 205, "Other...", function(){
-			FlxG.switchState(new EngineEditorsState());
+		var button6:FlxButton = new FlxButton(35, 205, "Event Editor", function(){
+			MainMenuState.Editorsmainyes = false;
+			FlxG.switchState(new engineEditors.MidSongEventEditor());
 		});
         add(button6);
 
+		var button8:FlxButton = new FlxButton(35, 230, "Credits Editor", function(){
+			FlxG.switchState(new engineEditors.CreditsEditor());
+		});
+        add(button8);
+
+		var button7:FlxButton = new FlxButton(35, 255, "Other...", function(){
+			MainMenuState.Editorsmainyes = false;
+			FlxG.switchState(new EngineEditorsState());
+		});
+        add(button7);
+
 		var close:FlxButton = new FlxButton(310, 50, "X", function(){
-			MainMenuState.Editorsnull = true;
-			FlxG.switchState(new MainMenuState());
+			MainMenuState.Editorsmainyes = false;
+			close();
 		});
 		close.color = FlxColor.RED;
         add(close);
@@ -87,6 +103,11 @@ class EditorsMain extends FlxSubState
 		super.create();
     }
     override function update(elapsed:Float){
+		if(controls.BACK)
+			{
+				MainMenuState.Editorsmainyes = false;
+				close();
+			}
 		super.update(elapsed);
     }
 

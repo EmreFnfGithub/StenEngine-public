@@ -13,7 +13,9 @@ import openfl.Lib;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIState;
-
+import flixel.FlxState;
+import flixel.FlxBasic;
+import flixel.addons.transition.FlxTransitionableState;
 class MusicBeatState extends FlxUIState
 {
 	private var lastBeat:Float = 0;
@@ -215,6 +217,26 @@ class MusicBeatState extends FlxUIState
 		#else
 		FlxG.openURL(schmancy);
 		#end
+	}
+
+	public static function switchState(nextState:FlxState) {
+		var curState:Dynamic = FlxG.state;
+		var leState:MusicBeatState = curState;
+		if(!FlxTransitionableState.skipNextTransIn) {
+			leState.openSubState(new CustomFadeTransition(0.6, false));
+			if(nextState == FlxG.state) {
+				CustomFadeTransition.finishCallback = function() {
+					FlxG.resetState();
+				};
+			} else {
+				CustomFadeTransition.finishCallback = function() {
+					FlxG.switchState(nextState);
+				};
+			}
+			return;
+		}
+		FlxTransitionableState.skipNextTransIn = false;
+		FlxG.switchState(nextState);
 	}
 
 	function onWindowFocusOut():Void

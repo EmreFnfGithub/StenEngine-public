@@ -39,9 +39,6 @@ class ThisExit extends MusicBeatState
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Yes':
-                //trace('david loh');
-                //trace(menuText.x);
-                //trace(menuText.y);
                 System.exit(0);
 			case 'No':
                 FlxG.sound.play(Paths.sound('cancelMenu'));

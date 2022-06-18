@@ -34,7 +34,9 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+#if sys
 import sys.io.Process;
+#end
 import flixel.FlxSubState;
 
 using StringTools;

@@ -1,64 +1,150 @@
-// This was made by GWebDev lol btw this uses actuate
 package;
 
-import motion.Actuate;
-import openfl.display.Sprite;
-import openfl.events.AsyncErrorEvent;
-import openfl.events.MouseEvent;
-import openfl.events.NetStatusEvent;
-import openfl.media.Video;
-import openfl.net.NetConnection;
-import openfl.net.NetStream;
 import flixel.FlxG;
+import flixel.FlxState;
+import openfl.events.Event;
+import openfl.media.Video;
+import openfl.net.NetStream;
+import vlc.VlcBitmap;
 
-using StringTools;
-
+// THIS IS FOR TESTING
+// DONT STEAL MY CODE >:(
 class VideoHandler
 {
-	public var netStream:NetStream;
-	public var video:Video;
-	public var isReady:Bool = false;
-	public var addOverlay:Bool = false;
-	public var vidPath:String = "";
-	public var ignoreShit:Bool = false;
+	#if desktop
+	public static var video:Video;
+	public static var netStream:NetStream;
+	public static var finishCallback:FlxState;
+
+	#if desktop
+	public static var vlcBitmap:VlcBitmap;
+	#end
 
 	public function new()
 	{
-		isReady = false;
-	}
+		FlxG.autoPause = false;
 
-	public function source(?vPath:String):Void
-	{
-		if (vPath != null && vPath.length > 0)
+		if (FlxG.sound.music != null)
 		{
-			vidPath = vPath;
+			FlxG.sound.music.stop();
 		}
 	}
 
-	public function init1():Void
+	public function playMP4(path:String, callback:FlxState, ?repeat:Bool = false, ?isWindow:Bool = false, ?isFullscreen:Bool = false):Void
 	{
-		isReady = false;
+		#if html5
+		FlxG.autoPause = false;
+
+		if (FlxG.sound.music != null)
+		{
+			FlxG.sound.music.stop();
+		}
+
+		finishCallback = callback;
+
 		video = new Video();
-		video.visible = false;
-	}
+		video.x = 0;
+		video.y = 0;
 
-	public function init2():Void
-	{
-		#if web
-		var netConnection = new NetConnection();
-		netConnection.connect(null);
+		FlxG.addChildBelowMouse(video);
 
-		netStream = new NetStream(netConnection);
+		var nc = new NetConnection();
+		nc.connect(null);
+
+		netStream = new NetStream(nc);
 		netStream.client = {onMetaData: client_onMetaData};
-		netStream.addEventListener(AsyncErrorEvent.ASYNC_ERROR, netStream_onAsyncError);
 
-		netConnection.addEventListener(NetStatusEvent.NET_STATUS, netConnection_onNetStatus);
-		netConnection.addEventListener(NetStatusEvent.NET_STATUS, onPlay);
-		netConnection.addEventListener(NetStatusEvent.NET_STATUS, onEnd);
+		nc.addEventListener("netStatus", netConnection_onNetStatus);
+
+		netStream.play(path);
+		#else
+		finishCallback = callback;
+
+		vlcBitmap = new VlcBitmap();
+		vlcBitmap.set_height(FlxG.stage.stageHeight);
+		vlcBitmap.set_width(FlxG.stage.stageHeight * (16 / 9));
+
+		trace("Setting width to " + FlxG.stage.stageHeight * (16 / 9));
+		trace("Setting height to " + FlxG.stage.stageHeight);
+
+		vlcBitmap.onVideoReady = onVLCVideoReady;
+		vlcBitmap.onComplete = onVLCComplete;
+		vlcBitmap.onError = onVLCError;
+
+		FlxG.stage.addEventListener(Event.ENTER_FRAME, update);
+
+		if (repeat)
+			vlcBitmap.repeat = -1;
+		else
+			vlcBitmap.repeat = 0;
+
+		vlcBitmap.inWindow = isWindow;
+		vlcBitmap.fullscreen = isFullscreen;
+
+		FlxG.addChildBelowMouse(vlcBitmap);
+		vlcBitmap.play(checkFile(path));
 		#end
 	}
 
-	public function client_onMetaData(metaData:Dynamic)
+	#if desktop
+	function checkFile(fileName:String):String
+	{
+		var pDir = "";
+		var appDir = "file:/" + Sys.getCwd() + "/";
+
+		if (fileName.indexOf(":") == -1) // Not a path
+			pDir = appDir;
+		else if (fileName.indexOf("file:/") == -1 || fileName.indexOf("http") == -1) // C:, D: etc? ..missing "file:///" ?
+			pDir = "file:/";
+
+		return pDir + fileName;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	function onVLCVideoReady()
+	{
+		trace("video loaded!");
+	}
+
+	public function onVLCComplete()
+	{
+		vlcBitmap.stop();
+
+		// Clean player, just in case!
+		vlcBitmap.dispose();
+
+		if (FlxG.game.contains(vlcBitmap))
+		{
+			FlxG.game.removeChild(vlcBitmap);
+		}
+
+		trace("Big, Big Chungus, Big Chungus!");
+
+		if (finishCallback != null)
+		{
+			LoadingState.loadAndSwitchState(finishCallback);
+		}
+	}
+
+	function onVLCError()
+	{
+
+		if (finishCallback != null)
+		{
+			LoadingState.loadAndSwitchState(finishCallback);
+		}
+	}
+
+	function update(e:Event)
+	{
+		vlcBitmap.volume = FlxG.sound.volume; // shitty volume fix
+	}
+	#end
+
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	function client_onMetaData(path)
 	{
 		video.attachNetStream(netStream);
 
@@ -66,129 +152,49 @@ class VideoHandler
 		video.height = FlxG.height;
 	}
 
-	public function netStream_onAsyncError(event:AsyncErrorEvent):Void
+	function netConnection_onNetStatus(path)
 	{
-		trace("Error loading video");
-	}
-
-	public function netConnection_onNetStatus(event:NetStatusEvent):Void
-	{
-		trace(event.info.code);
-	}
-
-	public function play():Void
-	{
-		#if web
-		ignoreShit = true;
-		netStream.close();
-		init2();
-		netStream.play(vidPath);
-		ignoreShit = false;
-		#end
-		trace(vidPath);
-	}
-
-	public function stop():Void
-	{
-		netStream.close();
-		onStop();
-	}
-
-	public function restart():Void
-	{
-		play();
-		onRestart();
-	}
-
-	public function update(elapsed:Float):Void
-	{
-		video.x = GlobalVideo.calc(0);
-		video.y = GlobalVideo.calc(1);
-		video.width = GlobalVideo.calc(2);
-		video.height = GlobalVideo.calc(3);
-	}
-
-	public var stopped:Bool = false;
-	public var restarted:Bool = false;
-	public var played:Bool = false;
-	public var ended:Bool = false;
-	public var paused:Bool = false;
-
-	public function pause():Void
-	{
-		netStream.pause();
-		paused = true;
-	}
-
-	public function resume():Void
-	{
-		netStream.resume();
-		paused = false;
-	}
-
-	public function togglePause():Void
-	{
-		if (paused)
+		if (path.info.code == "NetStream.Play.Complete")
 		{
-			resume();
+			finishVideo();
+		}
+	}
+
+	function finishVideo()
+	{
+		netStream.dispose();
+
+		if (FlxG.game.contains(video))
+		{
+			FlxG.game.removeChild(video);
+		}
+
+		if (finishCallback != null)
+		{
+			LoadingState.loadAndSwitchState(finishCallback);
 		}
 		else
-		{
-			pause();
-		}
+			LoadingState.loadAndSwitchState(new MainMenuState());
 	}
 
-	public function clearPause():Void
-	{
-		paused = false;
-	}
+	// old html5 player
+	/*
+		var nc:NetConnection = new NetConnection();
+		nc.connect(null);
 
-	public function onStop():Void
-	{
-		if (!ignoreShit)
-		{
-			stopped = true;
-		}
-	}
+		var ns:NetStream = new NetStream(nc);
 
-	public function onRestart():Void
-	{
-		restarted = true;
-	}
+		var myVideo:Video = new Video();
 
-	public function onPlay(event:NetStatusEvent):Void
-	{
-		if (event.info.code == "NetStream.Play.Start")
-		{
-			played = true;
-		}
-	}
+		myVideo.width = FlxG.width;
+		myVideo.height = FlxG.height;
+		myVideo.attachNetStream(ns);
 
-	public function onEnd(event:NetStatusEvent):Void
-	{
-		if (event.info.code == "NetStream.Play.Complete")
-		{
-			ended = true;
-		}
-	}
+		ns.play(path);
 
-	public function alpha():Void
-	{
-		video.alpha = GlobalVideo.daAlpha1;
-	}
+		return myVideo;
 
-	public function unalpha():Void
-	{
-		video.alpha = GlobalVideo.daAlpha2;
-	}
-
-	public function hide():Void
-	{
-		video.visible = false;
-	}
-
-	public function show():Void
-	{
-		video.visible = true;
-	}
+		ns.close();
+	 */
+	 #end
 }

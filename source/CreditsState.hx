@@ -149,6 +149,11 @@ class CreditsState extends MusicBeatState
 			// creditText.screenCenter(X);
 		}
 
+		var versionShit:FlxText = new FlxText(950, FlxG.height - 25, 0, "Press E to Credits Editor", 12);
+                versionShit.scrollFactor.set();
+                versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+                //add(versionShit);
+				
 		changeSelection();
 		// FlxG.sound.playMusic(Paths.music('title'), 0);
 		// FlxG.sound.music.fadeIn(2, 0, 0.8);
@@ -174,10 +179,11 @@ class CreditsState extends MusicBeatState
 
 		var shiftMult:Int = 1;
 
-		if (FlxG.keys.justPressed.E)
+		/*if (FlxG.keys.justPressed.E)
 			{
-				FlxG.switchState(new CreditsEditorState());
+				FlxG.switchState(new CreditsEditor());
 			}
+			*/
 		if (FlxG.keys.pressed.SHIFT)
 			shiftMult = 3;
 

@@ -100,6 +100,157 @@ class Paths
 		}
 	}
 
+	static public function loadWeekJSON(key:String, ?library:String):Dynamic
+		{
+			var rawJson = OpenFlAssets.getText(Paths.jsonWeek(key, library)).trim();
+	
+			// Perform cleanup on files that have bad data at the end.
+			while (!rawJson.endsWith("}"))
+			{
+				rawJson = rawJson.substr(0, rawJson.length - 1);
+			}
+	
+			try
+			{
+				// Attempt to parse and return the JSON data.
+				return Json.parse(rawJson);
+			}
+			catch (e)
+			{
+				Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+				Debug.logError(e.message);
+	
+				// Return null.
+				return null;
+			}
+		}
+
+	static public function loadCharacterJSON(key:String, ?library:String):Dynamic
+		{
+			var rawJson = OpenFlAssets.getText(Paths.jsonChar(key, library)).trim();
+	
+			// Perform cleanup on files that have bad data at the end.
+			while (!rawJson.endsWith("}"))
+			{
+				rawJson = rawJson.substr(0, rawJson.length - 1);
+			}
+	
+			try
+			{
+				// Attempt to parse and return the JSON data.
+				return Json.parse(rawJson);
+			}
+			catch (e)
+			{
+				Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+				Debug.logError(e.message);
+	
+				// Return null.
+				return null;
+			}
+		}
+
+		static public function loadStageJson(key:String, ?library:String):Dynamic
+			{
+				var rawJson = OpenFlAssets.getText(Paths.jsonstage(key, library)).trim();
+		
+				// Perform cleanup on files that have bad data at the end.
+				while (!rawJson.endsWith("}"))
+				{
+					rawJson = rawJson.substr(0, rawJson.length - 1);
+				}
+		
+				try
+				{
+					// Attempt to parse and return the JSON data.
+					return Json.parse(rawJson);
+				}
+				catch (e)
+				{
+					Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+					Debug.logError(e.message);
+		
+					// Return null.
+					return null;
+				}
+			}
+
+			static public function loadStateJson(key:String, ?library:String):Dynamic
+				{
+					var rawJson = OpenFlAssets.getText(Paths.jsonstate(key, library)).trim();
+			
+					// Perform cleanup on files that have bad data at the end.
+					while (!rawJson.endsWith("}"))
+					{
+						rawJson = rawJson.substr(0, rawJson.length - 1);
+					}
+			
+					try
+					{
+						// Attempt to parse and return the JSON data.
+						return Json.parse(rawJson);
+					}
+					catch (e)
+					{
+						Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+						Debug.logError(e.message);
+			
+						// Return null.
+						return null;
+					}
+				}
+
+				static public function loadCustomGameJson(key:String, ?library:String):Dynamic
+					{
+						var rawJson = OpenFlAssets.getText(Paths.jsoncustomgame(key, library)).trim();
+				
+						// Perform cleanup on files that have bad data at the end.
+						while (!rawJson.endsWith("}"))
+						{
+							rawJson = rawJson.substr(0, rawJson.length - 1);
+						}
+				
+						try
+						{
+							// Attempt to parse and return the JSON data.
+							return Json.parse(rawJson);
+						}
+						catch (e)
+						{
+							Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+							Debug.logError(e.message);
+				
+							// Return null.
+							return null;
+						}
+					}
+	
+	
+	static public function loadJSON2(key:String, ?library:String):Dynamic
+		{
+			var rawJson = OpenFlAssets.getText(Paths.json2(key, library)).trim();
+	
+			// Perform cleanup on files that have bad data at the end.
+			while (!rawJson.endsWith("}"))
+			{
+				rawJson = rawJson.substr(0, rawJson.length - 1);
+			}
+	
+			try
+			{
+				// Attempt to parse and return the JSON data.
+				return Json.parse(rawJson);
+			}
+			catch (e)
+			{
+				Debug.logError("AN ERROR OCCURRED parsing a JSON file.");
+				Debug.logError(e.message);
+	
+				// Return null.
+				return null;
+			}
+		}
+
 	static public function getLibraryPath(file:String, library = "preload")
 	{
 		return if (library == "preload" || library == "default") getPreloadPath(file); else getLibraryPathForce(file, library);
@@ -115,6 +266,10 @@ class Paths
 		return 'assets/$file';
 	}
 
+	inline static public function ihateee(path:String) {
+		return path.toLowerCase().replace(' ', '-');
+	}
+
 	inline static public function file(file:String, ?library:String, type:AssetType = TEXT)
 	{
 		return getPath(file, type, library);
@@ -125,6 +280,26 @@ class Paths
 		return getPath('data/$key.lua', TEXT, library);
 	}
 
+	inline static public function hx(key:String, ?library:String)
+		{
+			return getPath('$key.hx', TEXT, library);
+		}
+
+	inline static public function formatToSongPath(path:String)
+		{
+			return path.toLowerCase().replace(' ', '-');
+		}
+
+	inline static public function stenJson(key:String, ?library:String)
+		{
+			return getPath('$key.json', TEXT, library);
+		}
+
+	inline static public function video(key:String, ?library:String)
+		{
+			trace('assets/videos/$key.mp4');
+			return getPath('videos/$key.mp4', BINARY, library);
+		}
 	inline static public function luaImage(key:String, ?library:String)
 	{
 		return getPath('data/$key.png', IMAGE, library);
@@ -135,6 +310,11 @@ class Paths
 		return getPath('$key.txt', TEXT, library);
 	}
 
+	inline static public function weektxt(key:String, ?library:String)
+	{
+		return getPath('custom/custom_weeks/weekSettings/$key.txt', TEXT, library);
+	}
+
 	inline static public function xml(key:String, ?library:String)
 	{
 		return getPath('data/$key.xml', TEXT, library);
@@ -143,6 +323,38 @@ class Paths
 	inline static public function json(key:String, ?library:String)
 	{
 		return getPath('data/$key.json', TEXT, library);
+	}
+
+	inline static public function weekcustomjson(key:String, ?library:String)
+	{
+		return getPath('custom/custom_weeks/$key.json', TEXT, library);
+	}
+
+	inline static public function jsonWeek(key:String, ?library:String)
+		{
+			return getPath('custom/$key.json', TEXT, library);
+		}
+
+	inline static public function jsonChar(key:String, ?library:String)
+		{
+			return getPath('custom/$key.json', TEXT, library);
+		}
+	inline static public function jsonstage(key:String, ?library:String)
+		{
+			return getPath('custom/custom_stages/$key.json', TEXT, library);
+		}
+	inline static public function jsonstate(key:String, ?library:String)
+		{
+			return getPath('custom/custom_states/$key.json', TEXT, library);
+		}
+	inline static public function jsoncustomgame(key:String, ?library:String)
+		{
+			return getPath('custom/custom_game/$key.json', TEXT, library);
+		}
+
+	inline static public function json2(key:String, ?library:String)
+	{
+		return getPath('custom/custom_game/$key.json', TEXT, library);
 	}
 
 	static public function sound(key:String, ?library:String)

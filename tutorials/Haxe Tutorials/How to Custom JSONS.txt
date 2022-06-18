@@ -1,0 +1,10 @@
+typedef JsonTutorial = {
+	var gameTitle:String;
+	var gameDescription:String;
+}
+
+create function;
+----------------------------------------------------------------------------------------------------------
+		var jsonData = Paths.loadCustomGameJson("custom_game");
+		var data:CustomGameJson = cast jsonData;
+		lime.app.Application.current.window.title = data.gameTitle;

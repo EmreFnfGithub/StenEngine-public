@@ -29,6 +29,8 @@ class EngineEditorsState extends MusicBeatState
 {
 	var optionShit:Array<String> = 
 	[/*'Custom State Editor',*/
+	'Credits Editor',
+	'Events Editor',
 	'Stage Editor',
 	'Character Editor',
 	'Week Editor',
@@ -167,14 +169,20 @@ class EngineEditorsState extends MusicBeatState
 						LoadingState.loadAndSwitchState(new CustomStateEditor());
 						*/
 
+					case 'Events Editor':
+						FlxG.switchState(new engineEditors.MidSongEventEditor());
+
+					case 'Credits Editor':
+						FlxG.switchState(new engineEditors.CreditsEditor());
+
 					case 'Stage Editor':
-						LoadingState.loadAndSwitchState(new StageEditor());
+						FlxG.switchState(new engineEditors.StageEditor());
 
 					case 'Character Editor':
 						LoadingState.loadAndSwitchState(new MainMenuState());
 
 					case 'Week Editor':
-						LoadingState.loadAndSwitchState(new MainMenuState());
+						LoadingState.loadAndSwitchState(new engineEditors.WeekEditor());
 
 					case 'Mods':
 						LoadingState.loadAndSwitchState(new ModsMenuState());

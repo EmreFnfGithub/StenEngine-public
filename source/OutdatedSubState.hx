@@ -10,6 +10,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import sys.io.Process;
+import flixel.ui.FlxButton;
 
 class OutdatedSubState extends MusicBeatState
 {
@@ -18,6 +19,7 @@ class OutdatedSubState extends MusicBeatState
 	private var bgColors:Array<String> = ['#314d7f', '#4e7093', '#70526e', '#594465'];
 	private var colorRotation:Int = 1;
 
+	var button:FlxButton;
 	override function create()
 	{
 		super.create();
@@ -26,7 +28,6 @@ class OutdatedSubState extends MusicBeatState
 		bg.scale.y *= 1.55;
 		bg.screenCenter();
 		bg.antialiasing = FlxG.save.data.antialiasing;
-		add(bg);
 
 		var StenLogo:FlxSprite = new FlxSprite(FlxG.width, 0).loadGraphic(Paths.loadImage('StenEngineLogo'));
 		StenLogo.scale.y = 0.3;
@@ -35,7 +36,6 @@ class OutdatedSubState extends MusicBeatState
 		StenLogo.y -= 180;
 		StenLogo.alpha = 0.8;
 		StenLogo.antialiasing = FlxG.save.data.antialiasing;
-		add(StenLogo);
 
 		var txt:FlxText = new FlxText(0, 0, FlxG.width,
 			"Your Sten Engine is outdated!\nYou are on "
@@ -43,7 +43,7 @@ class OutdatedSubState extends MusicBeatState
 			+ "\n\nPress enter to update",
 			32);
 
-		txt.setFormat("VCR OSD Mono", 32, FlxColor.fromRGB(200, 200, 200), CENTER);
+		txt.setFormat("PhantomMuff 1.5", 32, FlxColor.fromRGB(200, 200, 200), CENTER);
 		txt.borderColor = FlxColor.BLACK;
 		txt.borderSize = 3;
 		txt.borderStyle = FlxTextBorderStyle.OUTLINE;
@@ -77,6 +77,12 @@ class OutdatedSubState extends MusicBeatState
 			else
 				FlxTween.tween(StenLogo, {alpha: 0.8}, 0.8, {ease: FlxEase.quartInOut});
 		}, 0);
+
+		button = new FlxButton(610, 470, "Don't show it again", function(){
+			FlxG.save.data.updatenotification = "false";
+			FlxG.switchState(new MainMenuState());
+		});
+		add(button);
 	}
 
 	override function update(elapsed:Float)

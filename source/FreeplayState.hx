@@ -660,13 +660,15 @@ class FreeplayState extends MusicBeatState
 
 		#if PRELOAD_ALL
 		if (songs[curSelected].songCharacter == "sm")
-		{
+		{   
+			#if desktop
 			var data = songs[curSelected];
 			trace("Loading " + data.path + "/" + data.sm.header.MUSIC);
 			var bytes = File.getBytes(data.path + "/" + data.sm.header.MUSIC);
 			var sound = new Sound();
-			sound.loadCompressedDataFromByteArray(bytes.getData(), bytes.length);
+			sound.loadCompressedDataFromByteArray(bytes.getData(), bytes.length);	
 			FlxG.sound.playMusic(sound);
+			#end
 		}
 		else
 			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);

@@ -29,31 +29,107 @@ using StringTools;
 class GamePlaySub extends MusicBeatState
 {
     private var grpOptions:FlxTypedGroup<Alphabet>;
-    var options:Array<String> = ['Redesigned Menu On', 'Redesigned Menu Off', 'Set Username', 'Scroll Speed Change', 'Offset Thing', 'Ghost Tap On', 'Ghost Tap Off', 'Bot Play On', 'Bot Play Off', 'DownScroll', 'UpScroll', 'Reset Button On', 'Reset Button Off', 'Customize Gameplay'];
+    var options:Array<String> = ['Toggle Practatice Mode','Set Menu Music', 'Edit Keybindings','Update Announcaments On','Colored Menu','Redesigned Menu', 'Set Username', 'Scroll Speed', 'Offset Thing', 'Ghost Tap', 'Bot Play', 'Down Scroll', 'Reset Button On', 'Reset Button Off', 'Customize Gameplay'];
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
     public static var hm:Bool = false;
 
 	function optionEnter(label:String) {
 		switch(label) {
-			case 'Redesigned Menu On':
-				FlxG.save.data.redesignedmenustyle = "On";
-			case 'Redesigned Menu Off':
-				FlxG.save.data.redesignedmenustyle = "Off";
+            case 'Toggle Practatice Mode':
+               if(FlxG.save.data.practaticeMode == "on")
+                {
+                    FlxG.save.data.practaticeMode = "off";
+                }
+                else{
+                    FlxG.save.data.practaticeMode = "on";
+                }
+            case 'Set Menu Music':
+               FlxG.switchState(new options.MenuSongSelector());
+            case 'Update Announcaments On':
+				FlxG.save.data.updatenotification = "true";
+            case 'Colored Menu':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = false;
+                Question.isRedesigned = false;
+                Question.isColored = true;
+                Question.isBotPlay = false;
+                Question.isScroll = false;
+                Question.isTap = false;
+				openSubState(new options.Question());
+			case 'Redesigned Menu':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = false;
+                Question.isRedesigned = true;
+                Question.isColored = false;
+                Question.isBotPlay = false;
+                Question.isScroll = false;
+                Question.isTap = false;
+				openSubState(new options.Question());
 			case 'Set Username':
 				FlxG.switchState(new SetUser());
-			case 'Ghost Tap On':
-				FlxG.save.data.ghost = "Enabled";
-            case 'Ghost Tap Off':
-                FlxG.save.data.ghost = "Disabled";
-            case 'Bot Play On':
-                FlxG.save.data.option = "on";
-            case 'Bot Play Off':
-                FlxG.save.data.option = "off";
-            case 'DownScroll':
-                FlxG.save.data.downscroll = "Downscroll";
-            case 'UpScroll':
-                FlxG.save.data.downscroll = "Upscroll";
+			case 'Ghost Tap':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = false;
+                Question.isRedesigned = false;
+                Question.isColored = false;
+                Question.isBotPlay = false;
+                Question.isScroll = false;
+                Question.isTap = true;
+                openSubState(new options.Question());
+            case 'Edit Keybindings':
+				openSubState(new KeyBindMenu());
+            case 'Bot Play':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = false;
+                Question.isRedesigned = false;
+                Question.isColored = false;
+                Question.isTap = false;
+                Question.isBotPlay = true;
+                Question.isScroll = false;
+                openSubState(new options.Question());
+            case 'Down Scroll':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = false;
+                Question.isRedesigned = false;
+                Question.isColored = false;
+                Question.isBotPlay = false;
+                Question.isScroll = true;
+                Question.isTap = false;
+                openSubState(new options.Question());
+            case 'Scroll Speed':
+                Question.isMenuSong = false;
+                Question.isAntialiasing = false;
+                Question.isWatermark = false;
+                Question.isFlashing = false;
+                Question.isFPS = false;
+                Question.isScrollSpeed = true;
+                Question.isRedesigned = false;
+                Question.isColored = false;
+                Question.isBotPlay = false;
+                Question.isScroll = false;
+                Question.isTap = false;
+                openSubState(new options.Question());
             case 'Reset Button On':
                 FlxG.save.data.resetButton = "on";
             case 'Reset Button Off':
@@ -97,9 +173,12 @@ class GamePlaySub extends MusicBeatState
             grpOptions = new FlxTypedGroup<Alphabet>();
 		    add(grpOptions);
 
+            
+
             for (i in 0...options.length)
                 {
                     var optionText:Alphabet = new Alphabet(0, (70 * i), options[i], true, false);
+                    optionText.isMenuItem = true;
                     optionText.screenCenter();
                     optionText.targetY = i;
                     optionText.y += (100 * (i - (options.length / 2))) + 50;
@@ -133,9 +212,9 @@ class GamePlaySub extends MusicBeatState
                 }
             if(controls.BACK)
                 {
-                    FlxG.switchState(new MainMenuState());
+                    FlxG.switchState(new options.MenuOptions());
                 }
-            
+         
         }
     function changeSelection(huh:Int = 0) {
             curSelected += huh;
@@ -146,36 +225,20 @@ class GamePlaySub extends MusicBeatState
     
             var bullShit:Int = 0;
     
-            for (item in grpOptions.members) {
-                item.targetY = bullShit - curSelected;
-                bullShit++;
-    
-                item.alpha = 0.6;
-                if (item.targetY == 0) {
-                    item.alpha = 1;
-                    selectorLeft.x = item.x - 63;
-                    selectorLeft.y = item.y;
-                    selectorRight.x = item.x + item.width + 15;
-                    selectorRight.y = item.y;
-                   
-                }
-                var add:Float = 0;
-				if(item.length > 4) {
-					add = item.length * 8;
-				}
-                
-                if(hm == true)
+            for (item in grpOptions.members)
+                {
+                    item.targetY = bullShit - curSelected;
+                    bullShit++;
+        
+                    item.alpha = 0.6;
+                    // item.setGraphicSize(Std.int(item.width * 0.8));
+        
+                    if (item.targetY == 0)
                     {
-                        item.offset.y -= 50;
+                        item.alpha = 1;
+                        // item.setGraphicSize(Std.int(item.width));
                     }
-                else{
-                    item.offset.y += 50;
                 }
-                /**
-                camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y - add);
-				spr.centerOffsets();
-                **/
-            }
             FlxG.sound.play(Paths.sound('scrollMenu'));
         }
         

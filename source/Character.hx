@@ -7,7 +7,10 @@ import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.Assets as OpenFlAssets;
 import haxe.Json;
+#if sys
 import sys.io.File;
+#end
+
 
 using StringTools;
 
@@ -415,6 +418,8 @@ class Character extends FlxSprite
 					y += 300;
 					
 					flipX = true;
+
+					barColor = 0x303030;
 				case 'bf-holding-gf':
 				
 					frames = Paths.getSparrowAtlas('characters/bfAndGF');
@@ -459,7 +464,7 @@ class Character extends FlxSprite
 					addOffset('shoot4', 439, -19);
 			
 					playAnim('shoot1');
-		        case 'gf-tankmen':
+		    case 'gf-tankmen':
 				frames = Paths.getSparrowAtlas('characters/gfTankmen');
 				animation.addByIndices('sad', 'GF Crying at Gunpoint ', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing at Gunpoint', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -472,25 +477,65 @@ class Character extends FlxSprite
 	
 				playAnim('danceRight');
 
-		    
-			default:
-				/*var o:String = sys.io.File.getContent("assets/custom/custom_characters/" + curCharacter + "/curCharImage.txt");
-				frames = Paths.getSparrowAtlas(o, 'shared', true);
-				animation.addByPrefix('idle', 'idle', 24, false);
-				animation.addByPrefix('singUP', 'up', 24, false);
-				animation.addByPrefix('singLEFT', 'left', 24, false);
-				animation.addByPrefix('singRIGHT', 'right', 24, false);
-				animation.addByPrefix('singDOWN', 'down', 24, false);
+			//TUTORIAL SOURCE CODE CUSTOM CHARACTERS 
+			/**
+			case 'yourcharactername':
+				tex = Paths.getSparrowAtlas('image_name' , 'shared' , true);
+				frames = tex;
+				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
+				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24, false);
+				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24, false);
+				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24, false);
+				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24, false);
+				animation.addByIndices('idleLoop', "Dad idle dance", [11, 12], "", 12, true);
 
+				
+				addOffset('hmmaddoffset', 0 , 0)
 				loadOffsetFile(curCharacter);
-				barColor = 0xFFffaa6f;
+				barColor = barColor;
 
 				playAnim('idle');
+			**/
 
-				setGraphicSize(Std.int(width * 6));
-				updateHitbox();
-				*/
-					parseDataFile();
+		    
+			default:
+				Debug.logInfo('Generating character (${curCharacter}) from JSON data...');
+	
+				// Load the data from JSON and cast it to a struct we can easily read.
+				var jsonData = Paths.loadCharacterJSON('custom_characters/${curCharacter}');
+				if (jsonData == null)
+				{
+					Debug.logError('Failed to parse JSON data for character ${curCharacter}');
+					return;
+				}
+		
+				var data:CharacterData = cast jsonData;
+		
+				var tex:FlxAtlasFrames = Paths.getSparrowAtlas(data.asset, 'shared');
+				frames = tex;
+				if (frames != null)
+					for (anim in data.animations)
+					{
+						var frameRate = anim.frameRate == null ? 24 : anim.frameRate;
+						var looped = anim.looped == null ? false : anim.looped;
+						var flipX = anim.flipX == null ? false : anim.flipX;
+						var flipY = anim.flipY == null ? false : anim.flipY;
+		
+						if (anim.frameIndices != null)
+						{
+							animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, "", frameRate, looped, flipX, flipY);
+						}
+						else
+						{
+							animation.addByPrefix(anim.name, anim.prefix, frameRate, looped, flipX, flipY);
+						}
+		
+						animOffsets[anim.name] = anim.offsets == null ? [0, 0] : anim.offsets;
+					}
+		
+				barColor = FlxColor.fromString(data.barColor);
+		
+				playAnim(data.startingAnim);
 				
 		}
 
@@ -518,47 +563,6 @@ class Character extends FlxSprite
 				}
 			}
 		}
-	}
-
-	function parseDataFile()
-	{
-		Debug.logInfo('Generating character (${curCharacter}) from JSON data...');
-
-		// Load the data from JSON and cast it to a struct we can easily read.
-		var jsonData = Paths.loadJSON('characters/${curCharacter}');
-		if (jsonData == null)
-		{
-			Debug.logError('Failed to parse JSON data for character ${curCharacter}');
-			return;
-		}
-
-		var data:CharacterData = cast jsonData;
-
-		var tex:FlxAtlasFrames = Paths.getSparrowAtlas(data.asset, 'shared');
-		frames = tex;
-		if (frames != null)
-			for (anim in data.animations)
-			{
-				var frameRate = anim.frameRate == null ? 24 : anim.frameRate;
-				var looped = anim.looped == null ? false : anim.looped;
-				var flipX = anim.flipX == null ? false : anim.flipX;
-				var flipY = anim.flipY == null ? false : anim.flipY;
-
-				if (anim.frameIndices != null)
-				{
-					animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, "", frameRate, looped, flipX, flipY);
-				}
-				else
-				{
-					animation.addByPrefix(anim.name, anim.prefix, frameRate, looped, flipX, flipY);
-				}
-
-				animOffsets[anim.name] = anim.offsets == null ? [0, 0] : anim.offsets;
-			}
-
-		barColor = FlxColor.fromString(data.barColor);
-
-		playAnim(data.startingAnim);
 	}
 
 	public function loadOffsetFile(character:String, library:String = 'shared')
@@ -632,7 +636,7 @@ class Character extends FlxSprite
 		{
 			switch (curCharacter)
 			{
-				case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel':
+				case 'gf' | 'gf-christmas' | 'gf-car' | 'gf-pixel' | 'gf-tankmen':
 					if (!animation.curAnim.name.startsWith('hair') && !animation.curAnim.name.startsWith('sing'))
 					{
 						danced = !danced;
@@ -659,6 +663,8 @@ class Character extends FlxSprite
 						if (!animation.curAnim.name.endsWith('custom animation'))
 							playAnim('idle', forced);
 				 */
+				case 'pico-speaker':
+					playAnim('shoot1');
 				default:
 					if (altAnim && animation.getByName('idle-alt') != null)
 						playAnim('idle-alt', forced);

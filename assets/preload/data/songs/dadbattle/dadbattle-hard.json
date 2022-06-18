@@ -6,6 +6,7 @@
     "player1": "bf",
     "player2": "dad",
     "speed": 2.3,
+    "stage": "stage",
     "notes": [
       { "lengthInSteps": 16, "mustHitSection": true, "sectionNotes": [] },
       { "lengthInSteps": 16, "mustHitSection": true, "sectionNotes": [] },

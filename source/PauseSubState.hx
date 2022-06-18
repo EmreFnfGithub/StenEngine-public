@@ -204,12 +204,25 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.stageTesting = false;
                         case "Chart Editor":
                         FlxG.switchState(new ChartingState());
+				case "Toggle Developer/Charter":
+					    if(FlxG.save.data.specialCharter == "on")
+							{
+								FlxG.save.data.specialCharter = "off";
+							}
+						else{
+						    FlxG.save.data.specialCharter = "on";
+						}
+							
 				case "Options":
-					goToOptions = true;
-					close();
+					FlxG.switchState(new options.MenuOptions());
 				case "Change Song":
 					FlxG.switchState(new FreeplayState());
 				case "Exit to menu":
+					if(FlxG.save.data.oneMinutes == "on")
+						{
+							FlxG.save.data.specialCharter = "off";
+							FlxG.save.data.oneMinutes = "off";
+						}
 					PlayState.startTime = 0;
 					if (PlayState.instance.useVideo)
 					{

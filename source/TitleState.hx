@@ -1,5 +1,8 @@
 package;
 
+import hscript.Expr;
+import hscript.Parser;
+import hscript.Interp;
 #if FEATURE_STEPMANIA
 import smTools.SMFile;
 #end
@@ -44,10 +47,6 @@ using StringTools;
 */
 class TitleState extends MusicBeatState
 {
-
-
-
-	
 	static var initialized:Bool = false;
     
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
@@ -65,9 +64,29 @@ class TitleState extends MusicBeatState
 	var updateAvailable:Bool = false;
 	var wackyImage:FlxSprite;
 	var playScript:Bool = false;
+	public static var description:String;
+	public static var interp:Interp;
 
 	override public function create():Void
 	{
+		var jsonData = Paths.loadCustomGameJson("custom_game");
+		var data:CustomGameJson = cast jsonData;
+		lime.app.Application.current.window.title = data.gameTitle;
+		description = data.gameDescription;
+
+		if(sys.FileSystem.exists('assets/scripts/titleScreen/Data.txt'))
+			{
+				var dataRead:String = sys.io.File.getContent('assets/scripts/titleScreen/Data.txt');
+				if(dataRead == "Title")
+					{
+						if(sys.FileSystem.exists('assets/scripts/titleScreen/Title.txt'))
+							{
+								var dataReadTitle:String = sys.io.File.getContent('assets/scripts/titleScreen/Title.txt');
+								Application.current.window.title = dataReadTitle;
+							}
+						
+					}
+			}
 		/*if(sys.FileSystem.exists("assets/custom/custom_game/custom_game.json"))
 			{
 				var list:customGame = Json.parse(string);
@@ -85,7 +104,6 @@ class TitleState extends MusicBeatState
 		}
 		
 		trace("Sten Engine Started! Welcome");
-
 		
 		// TODO: Refactor this to use OpenFlAssets.
 		#if FEATURE_FILESYSTEM
@@ -144,6 +162,53 @@ class TitleState extends MusicBeatState
 
 		trace('hello');
 
+		var expr = sys.io.File.getContent("assets/custom/custom_states/TitleState.hx");
+        //HScript
+						var parser = new hscript.Parser();
+						interp = new Interp();
+						var ast = parser.parseString(expr);
+						interp.variables.set("add", add);
+                        interp.variables.set("remove", remove);
+                        interp.variables.set("DiscordClient", DiscordClient);
+                        interp.variables.set("FlxG", flixel.FlxG);
+                        interp.variables.set("CustomState", CustomState);
+                        interp.variables.set("MenuItem", MenuItem);
+                        interp.variables.set("Character", Character);
+						interp.variables.set("gfDance", gfDance);
+                        interp.variables.set("FlxGame", flixel.FlxGame);
+						interp.variables.set("FlxObject", flixel.FlxObject);
+						interp.variables.set("FlxSprite", flixel.FlxSprite);
+						interp.variables.set("TitleState", TitleState);
+						interp.variables.set("FlxState", flixel.FlxState);
+						interp.variables.set("FlxSubState", flixel.FlxSubState);
+						interp.variables.set("FlxGridOverlay", flixel.addons.display.FlxGridOverlay);
+						interp.variables.set("FlxTrail", flixel.addons.effects.FlxTrail);
+						interp.variables.set("FlxTrailArea", flixel.addons.effects.FlxTrailArea);
+						interp.variables.set("FlxEffectSprite", flixel.addons.effects.chainable.FlxEffectSprite);
+						interp.variables.set("FlxWaveEffect", flixel.addons.effects.chainable.FlxWaveEffect);
+						interp.variables.set("FlxTransitionableState", flixel.addons.transition.FlxTransitionableState);
+						interp.variables.set("FlxAtlas", flixel.graphics.atlas.FlxAtlas);
+						interp.variables.set("FlxAtlasFrames", flixel.graphics.frames.FlxAtlasFrames);
+                        interp.variables.set("FlxMath", flixel.math.FlxMath);
+						interp.variables.set("FlxPoint", flixel.math.FlxPoint);
+						interp.variables.set("FlxRect", flixel.math.FlxRect);
+						interp.variables.set("FlxSound", flixel.system.FlxSound);
+						interp.variables.set("FlxText", flixel.text.FlxText);
+						interp.variables.set("FlxEase", flixel.tweens.FlxEase);
+						interp.variables.set("FlxTween", flixel.tweens.FlxTween);
+						interp.variables.set("MusicBeatState", MusicBeatState);
+						interp.variables.set("update", function(elapsed:Float)
+						{
+						});
+						interp.variables.set("create", function()
+						{
+						});
+
+                        interp.execute(ast);
+                        trace( interp.execute(program) ); 
+        callOnHscript("create");
+
+
 		#if desktop
 		DiscordClient.initialize();
 		
@@ -185,38 +250,75 @@ class TitleState extends MusicBeatState
 	{
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('TitleBG'));
+		if(sys.FileSystem.exists('assets/scripts/titleScreen/bg.json'))
+			{
+				var readBG:String = sys.io.File.getContent('assets/scripts/titleScreen/bg.json');
+				if(readBG == "add(FlxSprite);")
+					{
+						var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('TitleBG'));
 		
-		// bg.antialiasing = FlxG.save.data.antialiasing;
-		// bg.setGraphicSize(Std.int(bg.width * 0.6));
-		// bg.updateHitbox();
-		add(bg);
+						// bg.antialiasing = FlxG.save.data.antialiasing;
+						// bg.setGraphicSize(Std.int(bg.width * 0.6));
+						// bg.updateHitbox();
+						add(bg);
+						var readBGColored:String = sys.io.File.getContent('assets/scripts/titleScreen/FlxSprites/bg/colored.json');
+						if(readBGColored == "true")
+							{
+								bg.color = FlxG.random.color();
+							}
+						else{
 
-		if (Main.watermarks)
-		{
-			logoBl = new FlxSprite(-150, 1500);
-			logoBl.frames = Paths.getSparrowAtlas('StenEngineLogoBumpin');
+						}
+					}
+				else{
+
+				}
+				
+			}
+		else{
+
 		}
-		else
-		{
-			logoBl = new FlxSprite(-150, -100);
-			logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-		}
+		
+		logoBl = new FlxSprite(-150, -100);
+		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = FlxG.save.data.antialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBl.updateHitbox();
+		add(logoBl);
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
 
         backgroundTitle.screenCenter();
         backgroundTitle.antialiasing = true;
 
-		gfDance = new FlxSprite(FlxG.width * 0.2, FlxG.height * 0.03);
-		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = FlxG.save.data.antialiasing;
-		add(gfDance);
+		if(sys.FileSystem.exists('assets/scripts/titleScreen/girlFriend.json'))
+			{
+				var readGf:String = sys.io.File.getContent('assets/scripts/titleScreen/girlFriend.json');
+				if(readGf == "add(FlxSprite);")
+					{
+						gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+						gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
+						gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+						gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+						gfDance.antialiasing = FlxG.save.data.antialiasing;
+						add(gfDance);
+						gfDance.visible = true;
+					}
+				else{
+					gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+					gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
+					gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+					gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+					gfDance.antialiasing = FlxG.save.data.antialiasing;
+					add(gfDance);
+					gfDance.visible = false;
+				}
+			
+			}
+		else{
+
+		}
+
 
 		titleText = new FlxSprite(50, FlxG.height * 0.8);
 		titleText.x = 40;
@@ -284,16 +386,14 @@ class TitleState extends MusicBeatState
 
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
-
-			// HAD TO MODIFY SOME BACKEND SHIT
-			// IF THIS PR IS HERE IF ITS ACCEPTED UR GOOD TO GO
-			// https://github.com/HaxeFlixel/flixel-addons/pull/348
-
-			// var music:FlxSound = new FlxSound();
-			// music.loadStream(Paths.music('freakyMenu'));
-			// FlxG.sound.list.add(music);
-			// music.play();
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			if(FlxG.save.data.menuMusic == null)
+				{
+					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+				}
+			else{
+				FlxG.sound.playMusic(Paths.music(FlxG.save.data.menuMusic), 0);
+			}
+			
 
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
 			Conductor.changeBPM(102);
@@ -367,15 +467,50 @@ class TitleState extends MusicBeatState
 				titleText.animation.play('press');
 			add(titleText);
 
-			FlxG.camera.flash(FlxColor.WHITE, 1);
+			
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+
+			FlxTween.tween(logoBl, {y: -1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+				FlxTween.tween(gfDance, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+				FlxTween.tween(titleText, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+				FlxTween.tween(camera, {zoom: 3}, 3, {ease: FlxEase.backOut, type: ONESHOT});
+				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
+				FlxG.camera.flash(FlxColor.RED, 1);
 
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
 			MainMenuState.firstStart = true;
 			MainMenuState.finishedFunnyMove = false;
-			FlxG.switchState(new MainMenuState());
+			if(sys.FileSystem.exists('assets/scripts/titleScreen/Events/accept.json'))
+				{
+					var readSwitch:String = sys.io.File.getContent('assets/scripts/titleScreen/Events/accept.json');
+					if(readSwitch == "switch MainMenuState")
+						{
+							FlxG.switchState(new MainMenuState());
+						}
+					if(readSwitch == "switch FreeplayState")
+						{
+							FlxG.switchState(new FreeplayState());
+						}
+					if(readSwitch == "switch CreditsState")
+						{
+							FlxG.switchState(new CreditsState());
+						}
+					if(readSwitch == "switch EngineEditorsState")
+						{
+							FlxG.switchState(new EngineEditorsState());
+						}
+					if(readSwitch == "switch Options")
+						{
+							FlxG.switchState(new options.MenuOptions());
+						}
+					if(readSwitch == "switch OptionsOld")
+						{
+							FlxG.switchState(new OptionsDirect());
+						}
+				}
+			
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
@@ -384,11 +519,41 @@ class TitleState extends MusicBeatState
 				{
 					if (updateAvailable)
 					{
-						FlxG.switchState(new OutdatedSubState());
+						if(FlxG.save.data.updatenotification == "false")
+							{
+
+							}
+						else{
+							FlxG.switchState(new OutdatedSubState());
+						}
 					}
 					else
 					{
-						FlxG.switchState(new MainMenuState());
+						var readSwitch:String = sys.io.File.getContent('assets/scripts/titleScreen/Events/accept.json');
+					if(readSwitch == "switch MainMenuState")
+						{
+							FlxG.switchState(new MainMenuState());
+						}
+					if(readSwitch == "switch FreeplayState")
+						{
+							FlxG.switchState(new FreeplayState());
+						}
+					if(readSwitch == "switch CreditsState")
+						{
+							FlxG.switchState(new CreditsState());
+						}
+					if(readSwitch == "switch EngineEditorsState")
+						{
+							FlxG.switchState(new EngineEditorsState());
+						}
+					if(readSwitch == "switch Options")
+						{
+							FlxG.switchState(new options.MenuOptions());
+						}
+					if(readSwitch == "switch OptionsOld")
+						{
+							FlxG.switchState(new OptionsDirect());
+						}
 					}
 				});
 		
@@ -484,6 +649,12 @@ class TitleState extends MusicBeatState
 						ngSpr.visible = true;
 					// credTextShit.text += '\nNewgrounds';
 					case 7:
+						if(sys.FileSystem.exists('assets/scripts/titleScreen/Exclusive.json'))
+							{
+								var coolTextReadFile:String = sys.io.File.getContent('assets/scripts/titleScreen/Exclusive.json');
+								createCoolText([coolTextReadFile]);
+                                
+							}
 						deleteCoolText();
 						ngSpr.visible = false;
 					case 8:
@@ -524,4 +695,36 @@ class TitleState extends MusicBeatState
 			skippedIntro = true;
 		}
 	}
+
+	public function callOnHscript(functionToCall:String, ?params:Array<Any>):Dynamic
+        {
+            if (interp == null)
+            {
+                return null;
+            }
+            if (interp.variables.exists(functionToCall))
+            {
+                var functionH = interp.variables.get(functionToCall);
+                if (params == null)
+                {
+                    var result = null;
+                    result = functionH();
+                    return result;
+                }
+                else
+                {
+                    var result = null;
+                    result = Reflect.callMethod(null, functionH, params);
+                    return result;
+                }
+            }
+            return null;
+        }
+}
+
+typedef CustomGameJson = {
+	var gameTitle:String;
+	var gameDescription:String;
+	var mainMenuFont:String;
+	var modversionandtext:String;
 }

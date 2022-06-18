@@ -8,6 +8,9 @@ import lime.utils.AssetManifest;
 import flixel.FlxState;
 import flixel.FlxSprite;
 import openfl.utils.Assets as OpenFlAssets;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+
 using StringTools;
 
 class CoolUtil
@@ -16,7 +19,7 @@ class CoolUtil
 
 	public static var daPixelZoom:Float = 6;
     
-
+	public static var difficulties:Array<String> = [];
 
 	public static function difficultyFromInt(difficulty:Int):String
 	{
@@ -92,4 +95,9 @@ class CoolUtil
 		f.add(bg);
 		return bg;
 	}
+
+	public static function cameraZoom(target, zoomLevel:Float, speed, style, type)
+		{
+			FlxTween.tween(target, {zoom: zoomLevel}, speed, {ease: style, type: type});
+		}
 }

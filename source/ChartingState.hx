@@ -448,10 +448,12 @@ class ChartingState extends MusicBeatState
 		char1 = new Character(929, 230, _song.player1, true);
 		char1.setGraphicSize(Std.int(char1.width * 0.6));
 		char1.scrollFactor.set(0, 0);
+		char1.updateHitbox();
 		add(char1);
 		char2 = new Character(0, 30, _song.player2, false);
 		char2.setGraphicSize(Std.int(char2.width * 0.6));
 		char2.scrollFactor.set(0, 0);
+		char2.updateHitbox();
 		add(char2);
 
 		super.create();
@@ -670,6 +672,7 @@ class ChartingState extends MusicBeatState
 
 			
 		});
+		eventSave.color = FlxColor.MAGENTA;
 		var posLabel = new FlxText(150, 85, 'Event Position');
 		var eventPos = new FlxUIInputText(150, 100, 80, "");
 		var eventAdd = new FlxButton(95, 155, "Add Event", function()
@@ -936,7 +939,7 @@ class ChartingState extends MusicBeatState
 		Typeables.push(eventPos);
 		Typeables.push(eventValue);
 		Typeables.push(eventName);
-
+		eventRemove.color = FlxColor.BLUE;
 		var tab_events = new FlxUI(null, UI_options);
 		tab_events.name = "Events";
 		tab_events.add(posLabel);
@@ -1021,7 +1024,11 @@ class ChartingState extends MusicBeatState
 			resetSection(true);
 		});
 
-		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'load autosave', loadAutosave);
+		restart.color = FlxColor.ORANGE;
+		reloadSongJson.color = FlxColor.GREEN;
+		saveButton.color = FlxColor.LIME;
+		reloadSong.color = FlxColor.PINK;
+		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'Load Auto Save', loadAutosave);
 		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 65, 0.1, 1, 1.0, 5000.0, 1);
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
@@ -1080,6 +1087,7 @@ class ChartingState extends MusicBeatState
 			char1 = new Character(929, 30, _song.player1, true);
 		char1.setGraphicSize(Std.int(char1.width * 0.6));
 		char1.scrollFactor.set(0, 0);
+		char1.updateHitbox();
 		add(char1);
 		});
 		player1DropDown.selectedLabel = _song.player1;
@@ -1093,6 +1101,7 @@ class ChartingState extends MusicBeatState
 			char2 = new Character(0, 30, _song.player2, false);
 		    char2.setGraphicSize(Std.int(char2.width * 0.6));
 		    char2.scrollFactor.set(0, 0);
+			char2.updateHitbox();
 		    add(char2);
 
 		});
@@ -1296,8 +1305,47 @@ class ChartingState extends MusicBeatState
 			LoadingState.loadAndSwitchState(new PlayState());
 		});
 
+		var startSectionbutchart:FlxButton = new FlxButton(10, 105, "Play Chart Mode", function()
+			{
+				PlayState.SONG = _song;
+				FlxG.sound.music.stop();
+				if (!PlayState.isSM)
+					vocals.stop();
+				PlayState.startTime = _song.notes[curSection].startTime;
+				while (curRenderedNotes.members.length > 0)
+				{
+					curRenderedNotes.remove(curRenderedNotes.members[0], true);
+				}
+	
+				while (curRenderedSustains.members.length > 0)
+				{
+					curRenderedSustains.remove(curRenderedSustains.members[0], true);
+				}
+	
+				while (sectionRenderes.members.length > 0)
+				{
+					sectionRenderes.remove(sectionRenderes.members[0], true);
+				}
+				var toRemove = [];
+	
+				for (i in _song.notes)
+				{
+					if (i.startTime > FlxG.sound.music.length)
+						toRemove.push(i);
+				}
+	
+				for (i in toRemove)
+					_song.notes.remove(i);
+	
+				toRemove = []; // clear memory
+				FlxG.save.data.specialCharter = "on";
+				FlxG.save.data.oneMinutes = "on";
+				LoadingState.loadAndSwitchState(new PlayState());
+			});
+
 		tab_group_section.add(refresh);
 		tab_group_section.add(startSection);
+		tab_group_section.add(startSectionbutchart);
 		// tab_group_section.add(stepperCopy);
 		// tab_group_section.add(stepperCopyLabel);
 		tab_group_section.add(check_mustHitSection);
@@ -2456,7 +2504,7 @@ class ChartingState extends MusicBeatState
 				+ snap
 				+ "\n"
 				+ (doSnapShit ? "Snap enabled" : "Snap disabled");
-
+			bpmTxt.font = "PhantomMuff1.5stenEngine";
 			var left = FlxG.keys.justPressed.ONE;
 			var down = FlxG.keys.justPressed.TWO;
 			var up = FlxG.keys.justPressed.THREE;
