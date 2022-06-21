@@ -8,7 +8,7 @@ This engine was made for modding the Friday Night Funkin. [More Information](htt
 https://emrefnfgithub.github.io/
 # Engine Credits
 - EmreFnF
-- Behlul
+**All Everything**
 # Friday Night Funkin' Credits
 - ninjamuffin99
 - PhantomArcade
@@ -40,7 +40,7 @@ https://emrefnfgithub.github.io/
 ### Installing the Required Programs
 
 First, you need to install Haxe and HaxeFlixel. I'm too lazy to write and keep updated with that setup (which is pretty simple). 
-1. [Install Haxe 4.1.5](https://haxe.org/download/version/4.1.5/) (Download 4.1.5 instead of 4.2.0 because 4.2.0 is broken and is not working with gits properly...)
+1. [Install Haxe 4.2.4/4.1.5](https://haxe.org/download/version/4.1.5/) (Download Haxe 4.2.4/4.1.5)
 2. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) after downloading Haxe
 
 Other installations you'd need are the additional libraries, a fully updated list will be in `Project.xml` in the project root. Currently, these are all of the things you need to install:
@@ -69,6 +69,17 @@ At the moment, you can optionally fix the transition bug in songs with zoomed-ou
 I gitignore the API keys for the game so that no one can nab them and post fake high scores on the leaderboards. But because of that the game
 doesn't compile without it.
 
-Just make a file in `/source` and call it `APIStuff.hx`, and copy & paste this into it
-
-**Check Up https://gamebanana.com/mods/375364**
+### Moddable
+Custom States
+Custom Characters
+Custom Stages
+Custom Weeks
+Custom Credits
+Custom Game (title,desc,others)
+Others
+### Changelogs
+Published 1.0.0
+Changelogs : Check gamebanana
+### Status
+1.1.2 in progress
+Custom options, and fixes, others...
