@@ -1103,7 +1103,6 @@ class ChartingState extends MusicBeatState
 		    char2.scrollFactor.set(0, 0);
 			char2.updateHitbox();
 		    add(char2);
-
 		});
 		player2DropDown.selectedLabel = _song.player2;
 

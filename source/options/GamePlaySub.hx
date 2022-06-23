@@ -29,13 +29,21 @@ using StringTools;
 class GamePlaySub extends MusicBeatState
 {
     private var grpOptions:FlxTypedGroup<Alphabet>;
-    var options:Array<String> = ['Toggle Practatice Mode','Set Menu Music', 'Edit Keybindings','Update Announcaments On','Colored Menu','Redesigned Menu', 'Set Username', 'Scroll Speed', 'Offset Thing', 'Ghost Tap', 'Bot Play', 'Down Scroll', 'Reset Button On', 'Reset Button Off', 'Customize Gameplay'];
+    var options:Array<String> = ['Toggle Dark Mode', 'Toggle Light Mode', 'Toggle Practatice Mode','Set Menu Music', 'Edit Keybindings','Update Announcaments On','Colored Menu','Redesigned Menu', 'Set Username', 'Scroll Speed', 'Offset Thing', 'Ghost Tap', 'Bot Play', 'Down Scroll', 'Reset Button On', 'Reset Button Off', 'Customize Gameplay'];
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
     public static var hm:Bool = false;
 
 	function optionEnter(label:String) {
 		switch(label) {
+            case 'Toggle Dark Mode':
+                FlxG.save.data.mode = "dark";
+            case 'Toggle Light Mode':
+                FlxG.save.data.mode = "light";
+            case 'On Cutscenes':
+                FlxG.save.data.oncutscenes = "true";
+            case 'Off Cutscenes':
+                FlxG.save.data.oncutscenes = "false";
             case 'Toggle Practatice Mode':
                if(FlxG.save.data.practaticeMode == "on")
                 {

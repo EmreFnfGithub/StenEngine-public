@@ -85,6 +85,10 @@ class CreditsState extends MusicBeatState
 		add(grpCredits);
 
 		var contentt1:String = sys.io.File.getContent('assets/data/creditsColors/' + curSelected + '.txt');
+			if(contentt1 == "ORANGE")
+			{
+				bg.color = FlxColor.ORANGE;
+			}
 			if(contentt1 == "RED")
 			{
 				bg.color = FlxColor.RED;

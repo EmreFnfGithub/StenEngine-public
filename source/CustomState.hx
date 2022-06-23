@@ -23,16 +23,20 @@ import lime.app.Application;
 #if FEATURE_DISCORD
 import Discord.DiscordClient;
 #end
+#if sys
 import sys.FileSystem;
 import sys.io.File;
+#end
 
 using StringTools;
 
 class CustomState extends MusicBeatState
 {
     public static var char1:Character = null;
+	#if sys
 	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
 	public static var language:String = hmmmmmmmmmmmmmmmm;
+	#end
    
     var h5:Bool = false;
     var h6:Bool = false;

@@ -39,20 +39,30 @@ class LanguageState extends MusicBeatState
 	function optionEnter(label:String) {
 		switch(label) {
             case 'English':
+                #if sys
 				sys.FileSystem.deleteFile("assets/data/language.txt");
                 sys.io.File.saveContent("assets/data/language.txt", "en");
+                #end
 			case 'Russian':
+                #if sys
 				sys.FileSystem.deleteFile("assets/data/language.txt");
                 sys.io.File.saveContent("assets/data/language.txt", "ru");
+                #end
 			case 'Turkish':
+                #if sys
 				sys.FileSystem.deleteFile("assets/data/language.txt");
                 sys.io.File.saveContent("assets/data/language.txt", "tr");
+                #end
 			case 'German':
+                #if sys
 				sys.FileSystem.deleteFile("assets/data/language.txt");
                 sys.io.File.saveContent("assets/data/language.txt", "german");
+                #end
 			case 'French':
+                #if sys
 				sys.FileSystem.deleteFile("assets/data/language.txt");
                 sys.io.File.saveContent("assets/data/language.txt", "french");
+                #end
 		}
 	}
 

@@ -47,7 +47,7 @@ class StageEditor extends MusicBeatState
 	var eventName5:FlxUIInputText;
 	var UI_box:FlxUITabMenu;
 	public static var hmmm:String = sys.io.File.getContent('assets/images/no/novar/a.txt');
-	public static var code:String = "{" + "\n" + "     camZoom: 1.0," + "\n" +  hmmm + "stagesprites" + hmmm + ": [";
+	public static var code:String = "{" + "\n" + hmmm + "     camZoom: 1.0," + hmmm + "\n" +  hmmm + "stagesprites" + hmmm + ": [";
 	override function create()
 	{
 		#if FEATURE_DISCORD
@@ -161,13 +161,13 @@ class StageEditor extends MusicBeatState
 			code = code + "\n" + hmmm + "animated" + hmmm + ": false" + ",";
 			code = code + "\n" + hmmm + "sparrowatlas" + hmmm + ":" + hmmm + hmmm + ",";
 			code = code + "\n" + hmmm + "startanim" + hmmm + ":" + hmmm + hmmm;
-			code = code + "\n" + "},";
+			code = code + "\n" + "}";
+			code = code + "\n" + ",";
 		}
 
 		function saveStage():Void
 		{
 			var content:String = sys.io.File.getContent("assets/data/stageList.txt");
-
 			code = code + "\n" + "    ]";
 			code = code + "\n" + "}";
             sys.io.File.saveContent("mods/" + eventName5.text + "/custom/custom_stages/" + eventName.text + ".json", code);

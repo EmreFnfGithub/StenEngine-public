@@ -59,7 +59,7 @@ class EditorsMain extends MusicBeatSubstate
 		var button3:FlxButton = new FlxButton(35, 130, "Character E", function(){
 			MainMenuState.Editorsmainyes = false;
 			MainMenuState.Editorsnull = true;
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new engineEditors.CharacterEditor());
 		});
         add(button3);
 

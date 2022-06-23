@@ -49,9 +49,9 @@ class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
     
-	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
+	public static var hmmmmmmmmmmmmmmmm:String;
 	//public static var thestenenginetitle:String = sys.io.File.getContent('assets/custom/custom_game/title.txt');
-	public static var language:String = hmmmmmmmmmmmmmmmm;
+	public static var language:String;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -66,14 +66,26 @@ class TitleState extends MusicBeatState
 	var playScript:Bool = false;
 	public static var description:String;
 	public static var interp:Interp;
+	var bg:FlxSprite;
 
 	override public function create():Void
 	{
+
+
+		#if sys
+		hmmmmmmmmmmmmmmmm = sys.io.File.getContent('assets/data/language.txt');
+		language = hmmmmmmmmmmmmmmmm;
+		#else
+		hmmmmmmmmmmmmmmmm = "en";
+		language = hmmmmmmmmmmmmmmmm;
+		#end
+
 		var jsonData = Paths.loadCustomGameJson("custom_game");
 		var data:CustomGameJson = cast jsonData;
 		lime.app.Application.current.window.title = data.gameTitle;
 		description = data.gameDescription;
 
+		#if sys
 		if(sys.FileSystem.exists('assets/scripts/titleScreen/Data.txt'))
 			{
 				var dataRead:String = sys.io.File.getContent('assets/scripts/titleScreen/Data.txt');
@@ -87,6 +99,7 @@ class TitleState extends MusicBeatState
 						
 					}
 			}
+		#end
 		/*if(sys.FileSystem.exists("assets/custom/custom_game/custom_game.json"))
 			{
 				var list:customGame = Json.parse(string);
@@ -131,6 +144,8 @@ class TitleState extends MusicBeatState
 
 		
 
+		
+
 		FlxG.autoPause = false;
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
@@ -162,6 +177,7 @@ class TitleState extends MusicBeatState
 
 		trace('hello');
 
+		#if sys
 		var expr = sys.io.File.getContent("assets/custom/custom_states/TitleState.hx");
         //HScript
 						var parser = new hscript.Parser();
@@ -169,7 +185,9 @@ class TitleState extends MusicBeatState
 						var ast = parser.parseString(expr);
 						interp.variables.set("add", add);
                         interp.variables.set("remove", remove);
+						#if FEATURE_DISCORD
                         interp.variables.set("DiscordClient", DiscordClient);
+						#end
                         interp.variables.set("FlxG", flixel.FlxG);
                         interp.variables.set("CustomState", CustomState);
                         interp.variables.set("MenuItem", MenuItem);
@@ -205,6 +223,7 @@ class TitleState extends MusicBeatState
 						});
 
                         interp.execute(ast);
+						#end
                         trace( interp.execute(program) ); 
         callOnHscript("create");
 
@@ -250,6 +269,7 @@ class TitleState extends MusicBeatState
 	{
 		persistentUpdate = true;
 
+		#if sys
 		if(sys.FileSystem.exists('assets/scripts/titleScreen/bg.json'))
 			{
 				var readBG:String = sys.io.File.getContent('assets/scripts/titleScreen/bg.json');
@@ -260,6 +280,10 @@ class TitleState extends MusicBeatState
 						// bg.antialiasing = FlxG.save.data.antialiasing;
 						// bg.setGraphicSize(Std.int(bg.width * 0.6));
 						// bg.updateHitbox();
+						if(FlxG.save.data.mode == "dark")
+							{
+								bg.color = FlxColor.GRAY;
+							}
 						add(bg);
 						var readBGColored:String = sys.io.File.getContent('assets/scripts/titleScreen/FlxSprites/bg/colored.json');
 						if(readBGColored == "true")
@@ -279,6 +303,7 @@ class TitleState extends MusicBeatState
 
 		}
 		
+		#end
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = FlxG.save.data.antialiasing;
@@ -291,6 +316,7 @@ class TitleState extends MusicBeatState
         backgroundTitle.screenCenter();
         backgroundTitle.antialiasing = true;
 
+		#if sys
 		if(sys.FileSystem.exists('assets/scripts/titleScreen/girlFriend.json'))
 			{
 				var readGf:String = sys.io.File.getContent('assets/scripts/titleScreen/girlFriend.json');
@@ -318,6 +344,7 @@ class TitleState extends MusicBeatState
 		else{
 
 		}
+		#end
 
 
 		titleText = new FlxSprite(50, FlxG.height * 0.8);
@@ -482,6 +509,7 @@ class TitleState extends MusicBeatState
 
 			MainMenuState.firstStart = true;
 			MainMenuState.finishedFunnyMove = false;
+			#if sys
 			if(sys.FileSystem.exists('assets/scripts/titleScreen/Events/accept.json'))
 				{
 					var readSwitch:String = sys.io.File.getContent('assets/scripts/titleScreen/Events/accept.json');
@@ -512,6 +540,7 @@ class TitleState extends MusicBeatState
 				}
 			
 		}
+		#end
 
 		if (pressedEnter && !skippedIntro && initialized)
 		{
@@ -529,7 +558,10 @@ class TitleState extends MusicBeatState
 					}
 					else
 					{
-						var readSwitch:String = sys.io.File.getContent('assets/scripts/titleScreen/Events/accept.json');
+						var readSwitch:String;
+						#if sys
+						readSwitch = sys.io.File.getContent('assets/scripts/titleScreen/Events/accept.json');
+
 					if(readSwitch == "switch MainMenuState")
 						{
 							FlxG.switchState(new MainMenuState());
@@ -554,6 +586,7 @@ class TitleState extends MusicBeatState
 						{
 							FlxG.switchState(new OptionsDirect());
 						}
+						#end
 					}
 				});
 		
@@ -631,8 +664,8 @@ class TitleState extends MusicBeatState
 						    if(language == "tr")
 							createCoolText(['Sten Engine', 'yapimcilari']);
 					case 3:
-						if (Main.watermarks)
-							addMoreText('EmreFnF and Behlul');
+					   //if (!Main.watermarks)
+							addMoreText('EmreFnF');
 					case 4:
 						   ngSpr2.visible = true;	
 						  case 5:
@@ -649,16 +682,20 @@ class TitleState extends MusicBeatState
 						ngSpr.visible = true;
 					// credTextShit.text += '\nNewgrounds';
 					case 7:
+						#if sys
 						if(sys.FileSystem.exists('assets/scripts/titleScreen/Exclusive.json'))
 							{
 								var coolTextReadFile:String = sys.io.File.getContent('assets/scripts/titleScreen/Exclusive.json');
 								createCoolText([coolTextReadFile]);
                                 
 							}
+						#end
 						deleteCoolText();
 						ngSpr.visible = false;
 					case 8:
+						remove(bg);
 						skipIntro();
+
 
 		}
 	}

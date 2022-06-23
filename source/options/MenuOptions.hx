@@ -30,7 +30,7 @@ class MenuOptions extends MusicBeatState
 {
     var description:String;
     private var grpOptions:FlxTypedGroup<Alphabet>;
-    var options:Array<String> = ['Language', 'Gameplay', 'Appearance', 'Misc', 'Saves', 'Real Options'];
+    var options:Array<String>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
     var icon:String;
@@ -58,6 +58,10 @@ class MenuOptions extends MusicBeatState
             case 'Real Options':
                 FlxG.switchState(new OptionsDirect());
                 description = "Old Options";
+            default:
+                CustomOptions.optionName = options[curSelected];
+                FlxG.switchState(new options.CustomOptions());
+                description = "";
 		}
 	}
 
@@ -72,6 +76,16 @@ class MenuOptions extends MusicBeatState
             DiscordClient.changePresence("In the Options", null);
             #end
 
+            //OPTIONS JSON
+            var jsonData = Paths.loadOptionsJson("options");
+				if (jsonData == null)
+				{
+					Debug.logError('Options Error!');
+					return;
+				}
+                //set options json
+				var data:OptionJson = cast jsonData;
+                options = data.options;
             //COLORED BG
             var bgColors:Array<String> = ['#314d7f', '#4e7093', '#70526e', '#594465'];
             var colorRotation:Int = 1;
@@ -174,4 +188,8 @@ class MenuOptions extends MusicBeatState
             FlxG.sound.play(Paths.sound('scrollMenu'));
         }
         
+}
+
+typedef OptionJson = {
+    var options:Array<String>;
 }

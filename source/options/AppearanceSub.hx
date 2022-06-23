@@ -19,7 +19,9 @@ import flixel.util.FlxTimer;
 import lime.app.Application;
 import miniGames.MiniGamesState;
 import funkinMedia.FunkinMedia;
+#if sys
 import sys.io.Process;
+#end
 import flixel.FlxSubState;
 #if FEATURE_DISCORD
 import Discord.DiscordClient;

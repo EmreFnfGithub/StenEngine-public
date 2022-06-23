@@ -8,7 +8,9 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+#if sys
 import sys.io.Process;
+#end
 class OptionsDirect extends MusicBeatState
 {
 	override function create()

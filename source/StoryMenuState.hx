@@ -72,8 +72,10 @@ class StoryMenuState extends MusicBeatState
 				if (FileSystem.exists(path))
 					rawJson = File.getContent(path);
 				#else
+				#if OpenFlAssets
 				if (OpenFlAssets.exists(path))
 					rawJson = OpenFlAssets.getText(path);
+				#end
 				#end
 				if (rawJson != null && rawJson.length > 0)
 					return cast Json.parse(rawJson);
@@ -195,6 +197,7 @@ class StoryMenuState extends MusicBeatState
 		add(scoreText);
 		add(txtWeekTitle);
 
+		#if sys
 		if(sys.FileSystem.exists("assets/custom/custom_weeks/weekSettings/" + weeksArray[curWeek] + "/loadChar.txt"))
 			{
 				remove(grpWeekCharacters);
@@ -208,7 +211,7 @@ class StoryMenuState extends MusicBeatState
 		else{
 			remove(grpWeekCharacters);
 		}
-
+		#end
 		updateText();
 
 		var bullShit:Int = 0;
@@ -386,8 +389,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
-					LoadingState.loadAndSwitchState(new PlayState(), true);
-				
+						LoadingState.loadAndSwitchState(new PlayState(), true);		
 			});
 		
 	}
@@ -444,15 +446,19 @@ class StoryMenuState extends MusicBeatState
 				#if sys
 				rawJson = File.getContent(Paths.stenJson('custom/custom_weeks/' + jsonInput)).trim();
 				#else
+				#if OpenFlAssets
 				rawJson = Assets.getText(Paths.stenJson('custom/custom_weeks/' + jsonInput)).trim();
+				#end
 				#end
 			}
 	
+			#if desktop
 			while (!rawJson.endsWith("}"))
 			{
 				rawJson = rawJson.substr(0, rawJson.length - 1);
 				// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
 			}
+			#end
 	
 			var swagShit:SwagWeek = cast Json.parse(rawJson);
 			return swagShit;
@@ -481,6 +487,7 @@ class StoryMenuState extends MusicBeatState
 				item.alpha = 0.6;
 			bullShit++;
 		}
+		#if sys
 		if(sys.FileSystem.exists("assets/custom/custom_weeks/weekSettings/" + weeksArray[curWeek] + "/loadChar.txt"))
 			{
 				remove(grpWeekCharacters);
@@ -493,13 +500,8 @@ class StoryMenuState extends MusicBeatState
 			}
 		else{
 			remove(grpWeekCharacters);
-			grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
-			grpWeekCharacters.add(new MenuCharacter(450, 25, 0.7, true));
-			var readCharacters:String = sys.io.File.getContent("assets/custom/custom_weeks/weekSettings/" + weeksArray[curWeek] + "/loadChar.txt");
-			grpWeekCharacters.members[0].setCharacter(readCharacters);
-			add(grpWeekCharacters);
 		}
-		
+		#end
 
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 

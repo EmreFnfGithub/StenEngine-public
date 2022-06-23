@@ -72,7 +72,9 @@ class WeekEditor extends MusicBeatState
 	var song2:String;
 	var song3:String;
 	var name4:String;
-	var content:String = sys.io.File.getContent('assets/custom/custom_weeks/weekList.txt');
+
+
+	var content:String;
 
 	//OTHERS
 	var UI_box:FlxUITabMenu;
@@ -81,6 +83,9 @@ class WeekEditor extends MusicBeatState
 	var scoreText:FlxText;
 	override function create()
 		{
+			#if sys
+			content = sys.io.File.getContent('assets/custom/custom_weeks/weekList.txt');
+			#end
 			#if FEATURE_DISCORD
             DiscordClient.changePresence("Week Editor", null);
             #end
@@ -208,6 +213,7 @@ class WeekEditor extends MusicBeatState
 			}
 		function createWeek()
 			{
+				#if sys
 				var abc:String = sys.io.File.getContent('assets/images/no/examp.txt');
 			var abcd:String = sys.io.File.getContent('assets/images/no/novar/a.txt');
 			var ehmmm:String = sys.io.File.getContent('assets/images/no/novar/b.txt');
@@ -224,6 +230,9 @@ class WeekEditor extends MusicBeatState
 				sys.io.File.saveContent("assets/custom/custom_weeks/" + eventName5.text + ".json", txt.text);
 				sys.FileSystem.deleteFile("assets/custom/custom_weeks/weekList.txt");
 				sys.io.File.saveContent("assets/custom/custom_weeks/weekList.txt", content + "\n" + eventName5.text);
+				#else
+				Debug.displayAlert("Failed!", "Use FNF Sten Engine to pc");
+				#end
 			}
     override function update(elapsed:Float)
 		{

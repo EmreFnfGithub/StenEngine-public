@@ -48,8 +48,8 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var hmmmmmmmmmmmmmmmm:String = sys.io.File.getContent('assets/data/language.txt');
-	public static var language:String = hmmmmmmmmmmmmmmmm;
+	public static var language:String;
+	public static var hmmmmmmmmmmmmmmmm:String;
 	public static var Editorsnull:Bool = false;
 	public static var redesignedmenustyle = false;
 
@@ -89,7 +89,7 @@ class MainMenuState extends MusicBeatState
 
 	public static var nightly:String = "";
 
-	public static var StenEngineVer:String = "1.0.0" + nightly;
+	public static var StenEngineVer:String = "1.0.5" + nightly;
 	public static var gameVer:String = "0.2.8";
 
 	var magenta:FlxSprite;
@@ -100,7 +100,13 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		
+		#if sys
+		hmmmmmmmmmmmmmmmm = sys.io.File.getContent('assets/data/language.txt');
+		language = hmmmmmmmmmmmmmmmm;
+		#else
+		hmmmmmmmmmmmmmmmm = "en";
+		language = hmmmmmmmmmmmmmmmm;
+		#end
 		
 		if(FlxG.save.data.redesignedmenustyle == "On")
 			{
@@ -148,6 +154,11 @@ class MainMenuState extends MusicBeatState
 			}
 		else{
 			bg.loadGraphic(Paths.loadImage('menuBG'));
+			if(FlxG.save.data.mode == "dark")
+				{
+					bg.loadGraphic(Paths.loadImage('menuDesat'));
+					bg.color = 0x242424;
+				}
 		}
 		add(bg);
 
@@ -235,7 +246,9 @@ class MainMenuState extends MusicBeatState
 						var ast = parser.parseString(expr);
 						interp.variables.set("add", add);
                         interp.variables.set("remove", remove);
+						#if FEATURE_DISCORD
                         interp.variables.set("DiscordClient", DiscordClient);
+						#end
                         interp.variables.set("FlxG", flixel.FlxG);
                         interp.variables.set("CustomState", CustomState);
                         interp.variables.set("MenuItem", MenuItem);
@@ -334,7 +347,11 @@ class MainMenuState extends MusicBeatState
 					}
                 
 
+<<<<<<< Updated upstream
 				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer, 12);
+=======
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer + "", 12);
+>>>>>>> Stashed changes
 				versionShit.scrollFactor.set();
 				versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 				if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShitTwo.json'))
@@ -376,7 +393,7 @@ class MainMenuState extends MusicBeatState
                 versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
                 add(versionShit);
 
-				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer + " Press F to Funkin Media", 12);
+				var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Press E to Editor/Mods - FNF v" + gameVer, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(h11, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		if(sys.FileSystem.exists('assets/scripts/mainMenu/versionShitTwo.json'))
@@ -624,7 +641,9 @@ class MainMenuState extends MusicBeatState
 						{
 							if (optionShit[curSelected] == 'donate')
 							{
-								CoolUtil.browserLoad("https://ninja-muffin24.itch.io/funkin");
+								var menuJsonData2 = Paths.loadCustomGameJson("main_menu");
+	                            var dataMenuDonate:MenuData = cast menuJsonData2;
+								CoolUtil.browserLoad(dataMenuDonate.donateLink);
 							}
 							else
 							{
@@ -736,6 +755,9 @@ class MainMenuState extends MusicBeatState
 
 	function changeItem(huh:Int = 0)
 	{
+		var menuJsonData = Paths.loadCustomGameJson("main_menu");
+	    var dataMenu:MenuData = cast menuJsonData;
+
 		curSelected += huh;
 
 		if (curSelected >= menuItems.length)
@@ -746,8 +768,8 @@ class MainMenuState extends MusicBeatState
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.animation.play('idle');
-			spr.scale.x = 0.9;
-			spr.scale.y = 0.9;
+			spr.scale.x = dataMenu.defaultScaleX;
+			spr.scale.y = dataMenu.defaultScaleY;
 			spr.updateHitbox();
 
 			if (spr.ID == curSelected)
@@ -755,8 +777,8 @@ class MainMenuState extends MusicBeatState
 				spr.animation.play('selected');
              
 
-				spr.scale.x = 1.1;
-				spr.scale.y = 1.1;
+				spr.scale.x = dataMenu.curSelectedScaleX;
+				spr.scale.y = dataMenu.curSelectedScaleY;
 				var add:Float = 0;
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;
@@ -792,4 +814,13 @@ class MainMenuState extends MusicBeatState
             }
             return null;
         }
+}
+
+typedef MenuData = {
+	var ?name:String;
+	var curSelectedScaleX:Float;
+	var curSelectedScaleY:Float;
+	var defaultScaleX:Float;
+	var defaultScaleY:Float;
+	var donateLink:String;
 }

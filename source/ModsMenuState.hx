@@ -25,6 +25,7 @@ import lime.utils.Assets;
 import sys.io.File;
 import sys.FileSystem;
 #end
+import flash.geom.Rectangle;
 
 using StringTools;
 
@@ -35,12 +36,18 @@ class ModsMenuState extends MusicBeatState
 
 	static var curSelected:Int = 0;
 
+	var cornerSize:Int = 11;
+
 	private var grpMods:FlxTypedGroup<Alphabet>;
     public var modIcon:FlxSprite;
 	var descText:FlxText;
+	var selector:AttachedSprite;
 	var bg:FlxSprite;
 	var colorTween:FlxTween;
-
+    var modSelectedName:String;
+	var ending:Bool = false;
+	var modText:Alphabet;
+	var hmmended:Bool;
 	override function create()
 	{
 		
@@ -88,7 +95,7 @@ class ModsMenuState extends MusicBeatState
 
 		for (i in 0...mods.length)
 		{
-			var modText:Alphabet = new Alphabet(0, (70 * i) + 30, mods[i].modName, true, false);
+		    modText = new Alphabet(0, (70 * i) + 30, mods[i].modName, true, false);
 			modText.isMenuItem = true;
 			modText.targetY = i;
 			grpMods.add(modText);
@@ -110,6 +117,10 @@ class ModsMenuState extends MusicBeatState
 
 		button = new FlxButton(150, 20, "Create Mod", createMod);
         add(button);
+
+		remove(modText);
+		modSelectedName = mods[curSelected].modName;
+		selectMod(modSelectedName);
 		
 		super.create();
 	}
@@ -120,6 +131,8 @@ class ModsMenuState extends MusicBeatState
 
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
+		var rightP = controls.RIGHT_P;
+		var leftP = controls.LEFT_P;
 		var accepted = controls.ACCEPT;
 		var space = FlxG.keys.justPressed.SPACE;
 
@@ -127,30 +140,61 @@ class ModsMenuState extends MusicBeatState
 		if (FlxG.keys.pressed.SHIFT)
 			shiftMult = 3;
 
-		if (upP)
-		{
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-			changeSelection(-shiftMult);
-			remove(modIcon);
-			modIcon.loadGraphic('mods/' + mods[curSelected].modName + '/icon.png');
-			add(modIcon);
-		}
-		if (downP)
-		{
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-			changeSelection(shiftMult);
-			remove(modIcon);
-			modIcon.loadGraphic('mods/' + mods[curSelected].modName + '/icon.png');
-			add(modIcon);
-		}
-
+		if(!hmmended)
+			{
+				if (upP)
+					{
+						FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+						changeSelection(-shiftMult);
+						remove(modText);
+						modSelectedName = mods[curSelected].modName;
+						selectMod(modSelectedName);
+					}
+					if (downP)
+					{
+						FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+						changeSelection(shiftMult);
+						remove(modText);
+						modSelectedName = mods[curSelected].modName;
+						selectMod(modSelectedName);
+					}
+					if (rightP)
+						{
+							FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+							changeSelection(shiftMult);
+							remove(modText);
+							modSelectedName = mods[curSelected].modName;
+							selectMod(modSelectedName);
+						}
+						if (leftP)
+							{
+								FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+								changeSelection(shiftMult);
+								remove(modText);
+								modSelectedName = mods[curSelected].modName;
+								selectMod(modSelectedName);
+							}
+			
 		if (controls.BACK)
-			FlxG.switchState(new MainMenuState());
+					FlxG.switchState(new MainMenuState());
+		if(controls.ACCEPT)
+			{
+
+			}
+			}
+			else{
+				if(controls.BACK)
+					{
+						FlxG.switchState(new ModsMenuState());
+					}
+			}
+
 	}
 
 	function createMod():Void
 	{
-		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('menuDesat'));
+		hmmended = true;
+		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('menuBGBlue'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.10;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
@@ -168,7 +212,7 @@ class ModsMenuState extends MusicBeatState
 		bgHM.antialiasing = FlxG.save.data.antialiasing;
 		add(bgHM);
 
-		var eventNameEE:FlxUIInputText = new FlxUIInputText(350, 220, 80, "");
+		var eventNameEE:FlxUIInputText = new FlxUIInputText(350, 235, 80, "");
 		add(eventNameEE);
 
 		var close:FlxButton = new FlxButton(1150, 20, "X", function(){
@@ -177,10 +221,8 @@ class ModsMenuState extends MusicBeatState
 		close.color = FlxColor.RED;
         add(close);
 
-		var button5:FlxButton = new FlxButton(500, 220, "Create Mod", function(){
-			sys.FileSystem.createDirectory("mods/" + eventNameEE.text);
-		});
-        add(button5);
+		
+
 	}
 	function changeSelection(change:Int = 0)
 	{
@@ -211,6 +253,73 @@ class ModsMenuState extends MusicBeatState
 			}
 		}
 	}
+
+	function selectMod(modName:String):Void
+		{
+			//FlxG.camera.flash(FlxColor.WHITE, 1);
+			var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.loadImage('menuDesat'));
+			bg.scrollFactor.x = 0;
+			bg.scrollFactor.y = 0.10;
+			bg.setGraphicSize(Std.int(bg.width * 1.1));
+			bg.updateHitbox();
+			bg.screenCenter();
+			bg.antialiasing = FlxG.save.data.antialiasing;
+			add(bg);
+			ending = true;
+
+			var modText2:Alphabet = new Alphabet(0, (70 * 1) + -130, mods[curSelected].modName, true, false);
+			modText2.isMenuItem = false;
+			modText2.y += 290;
+			modText2.x +=300;
+			selector = new AttachedSprite();
+			selector.xAdd = -205;
+			selector.yAdd = -68;
+			selector.alphaMult = 0.5;
+			makeSelectorGraphic();
+			selector.sprTracker = modText2;
+			add(selector);
+			add(modText2);
+
+			button = new FlxButton(150, 20, "Create Mod", createMod);
+			add(button);
+			
+		}
+
+		// by psych engine
+		function makeSelectorGraphic()
+			{
+				selector.makeGraphic(1100, 450, FlxColor.BLACK);
+				selector.pixels.fillRect(new Rectangle(0, 190, selector.width, 5), 0x0);
+				selector.alpha = 0.6;
+		
+				// Why did i do this? Because i'm a lmao stupid, of course
+				// also i wanted to understand better how fillRect works so i did this shit lol???
+				selector.pixels.fillRect(new Rectangle(0, 0, cornerSize, cornerSize), 0x0);														 //top left
+				drawCircleCornerOnSelector(false, false);
+				selector.pixels.fillRect(new Rectangle(selector.width - cornerSize, 0, cornerSize, cornerSize), 0x0);							 //top right
+				drawCircleCornerOnSelector(true, false);
+				selector.pixels.fillRect(new Rectangle(0, selector.height - cornerSize, cornerSize, cornerSize), 0x0);							 //bottom left
+				drawCircleCornerOnSelector(false, true);
+				selector.pixels.fillRect(new Rectangle(selector.width - cornerSize, selector.height - cornerSize, cornerSize, cornerSize), 0x0); //bottom right
+				drawCircleCornerOnSelector(true, true);
+			}
+
+			// by psych engine
+			function drawCircleCornerOnSelector(flipX:Bool, flipY:Bool)
+				{
+					var antiX:Float = (selector.width - cornerSize);
+					var antiY:Float = flipY ? (selector.height - 1) : 0;
+					if(flipY) antiY -= 2;
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 1), Std.int(Math.abs(antiY - 8)), 10, 3), FlxColor.BLACK);
+					if(flipY) antiY += 1;
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 2), Std.int(Math.abs(antiY - 6)),  9, 2), FlxColor.BLACK);
+					if(flipY) antiY += 1;
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 3), Std.int(Math.abs(antiY - 5)),  8, 1), FlxColor.BLACK);
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 4), Std.int(Math.abs(antiY - 4)),  7, 1), FlxColor.BLACK);
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 5), Std.int(Math.abs(antiY - 3)),  6, 1), FlxColor.BLACK);
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 6), Std.int(Math.abs(antiY - 2)),  5, 1), FlxColor.BLACK);
+					selector.pixels.fillRect(new Rectangle((flipX ? antiX : 8), Std.int(Math.abs(antiY - 1)),  3, 1), FlxColor.BLACK);
+				}
 }
 
 class ModsMetadata
