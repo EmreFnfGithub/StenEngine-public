@@ -70,7 +70,16 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-
+		if(FlxG.save.data.muteBind == null)
+		{
+			FlxG.save.data.muteBind = "0";
+		}
+		if(FlxG.save.data.volUpBind == null)
+		{
+			FlxG.save.data.volUpBind = "+";
+		}
+		
+		
 
 		#if sys
 		hmmmmmmmmmmmmmmmm = sys.io.File.getContent('assets/data/language.txt');
