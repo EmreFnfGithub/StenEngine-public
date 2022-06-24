@@ -114,7 +114,7 @@ class TitleState extends MusicBeatState
 				var list:customGame = Json.parse(string);
 				Application.current.window.title = customGame.title;
 			}
-
+xd
 			*/
 
 		if(FlxG.save.data.redesignedmenustyle == "On")
