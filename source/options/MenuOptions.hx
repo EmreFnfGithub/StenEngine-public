@@ -114,9 +114,8 @@ class MenuOptions extends MusicBeatState
 
             for (i in 0...options.length)
                 {
-                    optionText = new Alphabet(0, (70 * i), options[i], true, false, true);
-                    optionText.isMenuItem = true;
-                    optionText.targetY = i;
+                    var optionText:Alphabet = new Alphabet(0, 0, options[i], true, false);
+                    optionText.screenCenter();
                     optionText.y += (100 * (i - (options.length / 2))) + 50;
                     grpOptions.add(optionText);
                     
